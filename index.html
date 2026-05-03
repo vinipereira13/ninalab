@@ -352,7 +352,10 @@ function renderizarVideos(vids) {
 function aplicarConteudo(secao, d) {
   if (secao === 'hero') {
     var t = document.querySelector('.hero-titulo');
-    if (t) t.innerHTML = '<span class="rosa">' + (d.linha1||'s') + '</span>' + (d.linha2||'eu mandato').substring(1) + '<br>' + (d.linha2||'eu mandato') + '<br>' + (d.linha3||'em modo');
+    if (t) t.innerHTML =
+      '<span class="rosa">' + (d.linha1||'s') + '</span>' +
+      (d.linha2||'eu mandato') + '<br>' +
+      (d.linha3||'em modo');
     setText('.toggle-on', d.toggle);
     setText('.btn-proposta', d.btn);
   } else if (secao === 'sobre') {
