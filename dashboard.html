@@ -818,44 +818,57 @@ main {
 // CONFIGURAÇÃO
 // ══════════════════════════════════════════
 var SENHA_PADRAO = 'ninalab2025';
-var SUPABASE_URL = localStorage.getItem('sb_url') || 'https://nyvrwgyijzfgcwmudmui.supabase.co';
-var SUPABASE_KEY = localStorage.getItem('sb_key') || 'sb_publishable_8nguAxVYYgRbtifxN-6TMA_M0p605cA';
+var SUPABASE_URL = 'https://nyvrwgyijzfgcwmudmui.supabase.co';
+var SUPABASE_KEY = 'sb_publishable_8nguAxVYYgRbtifxN-6TMA_M0p605cA';
+try {
+  SUPABASE_URL = localStorage.getItem('sb_url') || SUPABASE_URL;
+  SUPABASE_KEY = localStorage.getItem('sb_key') || SUPABASE_KEY;
+} catch(e) {}
 
-// Dados em memória (fallback sem Supabase)
-var dados = {
-  videos: JSON.parse(localStorage.getItem('nl_videos') || '[]'),
-  hero: JSON.parse(localStorage.getItem('nl_hero') || JSON.stringify({
-    linha1: 's', linha2: 'eu mandato', linha3: 'em modo',
-    toggle: 'on', btn: 'Solicite uma proposta'
-  })),
-  sobre: JSON.parse(localStorage.getItem('nl_sobre') || JSON.stringify({
+// Dados padrão
+var dadosPadrao = {
+  hero: { linha1: 's', linha2: 'eu mandato', linha3: 'em modo', toggle: 'on', btn: 'Solicite uma proposta' },
+  sobre: {
     stat1_num: '+30', stat1_desc: 'Candidatos atendidos',
     stat2_num: '100%', stat2_desc: 'Dedicação ao seu mandato',
     stat3_num: '+12', stat3_desc: 'Anos de experiência',
     titulo: 'Do roteiro ao resultado. A Nina Lab faz tudo.',
-    p1: 'A Nina Lab oferece tudo que uma comunicação política precisa. Do roteiro à edição final, criamos conteúdo que conecta mandatos e candidatos com as pessoas certas nas redes sociais.',
-    p2: 'Do Reels ao comercial de TV, da identidade visual à pauta semanal. Você foca no mandato. A gente cuida do resto.',
+    p1: 'A Nina Lab oferece tudo que uma comunicação política precisa.',
+    p2: 'Do Reels ao comercial de TV, da identidade visual à pauta semanal.',
     btn: 'Solicite uma proposta ↗'
-  })),
-  servicos: JSON.parse(localStorage.getItem('nl_servicos') || JSON.stringify([
+  },
+  servicos: [
     { num: '01', nome: 'ESTRATÉGIA', desc: 'Mapeamos o cenário político, definimos mensagem e construímos um plano de comunicação para cada fase do seu mandato.' },
     { num: '02', nome: 'DIREÇÃO DE ARTE', desc: 'Cada post, card e vídeo com uma identidade visual única. Seu eleitor reconhece seu conteúdo antes mesmo de ler o nome.' },
     { num: '03', nome: 'DESIGN', desc: 'Peças gráficas que comunicam posição política com clareza. Do card de votação ao material de campanha.' },
     { num: '04', nome: 'BRANDING', desc: 'Construímos a marca pessoal do político — nome, imagem e posicionamento que geram confiança no eleitorado.' },
     { num: '05', nome: 'CONTEÚDO DIGITAL', desc: 'Roteiros, pautas e calendário editorial pensados para manter o mandato relevante e ativo nas redes todos os dias.' }
-  ])),
-  instagram: JSON.parse(localStorage.getItem('nl_instagram') || JSON.stringify({
-    titulo: 'Veja mais no Instagram', btn: '@ninalab.on',
-    link: 'https://www.instagram.com/ninalab.on/'
-  })),
-  contato: JSON.parse(localStorage.getItem('nl_contato') || JSON.stringify({
+  ],
+  instagram: { titulo: 'Veja mais no Instagram', btn: '@ninalab.on', link: 'https://www.instagram.com/ninalab.on/' },
+  contato: {
     titulo: 'Traga mais estratégia para o seu mandato.',
     tel: '(48) 99640-7748', email: 'mv@ninalab.online',
     insta: 'https://www.instagram.com/ninalab.on/',
     form_titulo: 'Fale com nossos especialistas',
     form_sub: 'Conte-nos sobre você e sua candidatura:',
     form_id: 'xwvawnen'
-  }))
+  }
+};
+
+function ls_get(key, def) {
+  try { var v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch(e) { return def; }
+}
+function ls_set(key, val) {
+  try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
+}
+
+var dados = {
+  videos:    ls_get('nl_videos', []),
+  hero:      ls_get('nl_hero', dadosPadrao.hero),
+  sobre:     ls_get('nl_sobre', dadosPadrao.sobre),
+  servicos:  ls_get('nl_servicos', dadosPadrao.servicos),
+  instagram: ls_get('nl_instagram', dadosPadrao.instagram),
+  contato:   ls_get('nl_contato', dadosPadrao.contato)
 };
 
 // ══════════════════════════════════════════
@@ -863,7 +876,8 @@ var dados = {
 // ══════════════════════════════════════════
 function fazerLogin() {
   var senha = document.getElementById('senha-input').value;
-  var senhaCorreta = localStorage.getItem('nl_senha') || SENHA_PADRAO;
+  var senhaCorreta = SENHA_PADRAO;
+  try { senhaCorreta = localStorage.getItem('nl_senha') || SENHA_PADRAO; } catch(e) {}
   if (senha === senhaCorreta) {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('app').style.display = 'block';
@@ -871,6 +885,7 @@ function fazerLogin() {
   } else {
     document.getElementById('login-erro').style.display = 'block';
     document.getElementById('senha-input').value = '';
+    document.getElementById('senha-input').focus();
   }
 }
 
@@ -895,11 +910,12 @@ function irPara(pag, btn) {
 }
 
 // ══════════════════════════════════════════
-// CARREGAR DADOS NOS CAMPOS
+// CARREGAR TUDO
 // ══════════════════════════════════════════
 function carregarTudo() {
-  // Tenta carregar do Supabase primeiro, depois preenche os campos
-  carregarDoSupabase().then(function() { preencherCampos(); });
+  carregarDoSupabase()
+    .then(function() { preencherCampos(); })
+    .catch(function() { preencherCampos(); });
 }
 
 function preencherCampos() {
@@ -944,19 +960,21 @@ function preencherCampos() {
   document.getElementById('form-id').value = c.form_id || '';
 
   // Config
-  document.getElementById('sb-url').value = SUPABASE_URL;
-  document.getElementById('sb-key').value = SUPABASE_KEY;
+  try {
+    document.getElementById('sb-url').value = SUPABASE_URL;
+    document.getElementById('sb-key').value = SUPABASE_KEY;
+  } catch(e) {}
 
   // Vídeos
   renderizarVideos();
-}  // fim preencherCampos
+}
 
 // ══════════════════════════════════════════
 // VÍDEOS
 // ══════════════════════════════════════════
 function renderizarVideos() {
   var lista = document.getElementById('video-lista');
-  if (!dados.videos.length) {
+  if (!dados.videos || !dados.videos.length) {
     lista.innerHTML = '<div class="empty-state"><div class="icon">🎬</div><p>Nenhum vídeo adicionado ainda.<br>Clique em "Adicionar vídeo" abaixo.</p></div>';
     return;
   }
@@ -965,12 +983,11 @@ function renderizarVideos() {
       ? 'https://vumbnail.com/' + v.id + '.jpg'
       : 'https://img.youtube.com/vi/' + v.id + '/hqdefault.jpg');
     return '<div class="video-item">' +
-      '<img class="video-thumb" src="' + thumb + '" onerror="this.style.background='#232123';this.style.display='block'">' +
+      '<img class="video-thumb" src="' + thumb + '" onerror="this.style.opacity=0.3">' +
       '<div class="video-info"><h4>' + (v.nome || 'Sem nome') + '</h4><p>' + (v.cargo || '') + ' · ' + (v.plataforma || 'vimeo').toUpperCase() + ' · ' + v.id + '</p></div>' +
       '<span class="video-badge">' + (v.plataforma || 'vimeo') + '</span>' +
-      '<div class="video-acoes">' +
-      '<button class="btn-perigo" onclick="removerVideo(' + i + ')">Remover</button>' +
-      '</div></div>';
+      '<div class="video-acoes"><button class="btn-perigo" onclick="removerVideo(' + i + ')">Remover</button></div>' +
+      '</div>';
   }).join('');
 }
 
@@ -999,11 +1016,9 @@ function salvarVideo() {
   var cargo = document.getElementById('add-cargo').value.trim();
   var thumb = document.getElementById('add-thumb').value.trim();
   var plat = document.getElementById('add-plataforma').value;
-
   if (!id) { toast('Informe o ID do vídeo', true); return; }
-
   dados.videos.push({ id: id, nome: nome, cargo: cargo, thumb: thumb, plataforma: plat });
-  salvarLocal('videos');
+  ls_set('nl_videos', dados.videos);
   salvarVideosSupabase();
   renderizarVideos();
   fecharFormVideo();
@@ -1013,7 +1028,7 @@ function salvarVideo() {
 function removerVideo(i) {
   if (!confirm('Remover este vídeo?')) return;
   dados.videos.splice(i, 1);
-  salvarLocal('videos');
+  ls_set('nl_videos', dados.videos);
   salvarVideosSupabase();
   renderizarVideos();
   toast('Vídeo removido.');
@@ -1025,11 +1040,11 @@ function removerVideo(i) {
 function renderizarServicos() {
   var lista = document.getElementById('servicos-lista');
   lista.innerHTML = dados.servicos.map(function(s, i) {
-    return '<div class="card"><div class="card-title">'  + s.num + ' · ' + s.nome + '</div>' +
+    return '<div class="card"><div class="card-title">' + s.num + ' · ' + s.nome + '</div>' +
       '<div class="field"><label>Nome do serviço</label>' +
-      '<input type="text" id="srv-nome-' + i + '" value="' + s.nome + '"></div>' +
+      '<input type="text" id="srv-nome-' + i + '" value="' + (s.nome||'') + '"></div>' +
       '<div class="field"><label>Descrição</label>' +
-      '<textarea id="srv-desc-' + i + '" rows="3">' + s.desc + '</textarea></div></div>';
+      '<textarea id="srv-desc-' + i + '" rows="3">' + (s.desc||'') + '</textarea></div></div>';
   }).join('');
 }
 
@@ -1080,123 +1095,28 @@ function salvar(secao) {
       form_id: document.getElementById('form-id').value
     };
   }
-
-  salvarLocal(secao);
+  ls_set('nl_' + secao, dados[secao]);
   salvarSupabase(secao);
   toast('Salvo com sucesso! ✓');
-}
-
-function salvarLocal(secao) {
-  localStorage.setItem('nl_' + secao, JSON.stringify(dados[secao]));
-}
-
-async function salvarSupabase(secao) {
-  if (!SUPABASE_URL || !SUPABASE_KEY) return;
-  try {
-    // Tenta PATCH (atualizar), se não existir faz POST (criar)
-    var res = await fetch(SUPABASE_URL + '/rest/v1/conteudo?secao=eq.' + secao, {
-      method: 'PATCH',
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': 'Bearer ' + SUPABASE_KEY,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify({ dados: dados[secao], atualizado_em: new Date().toISOString() })
-    });
-    if (!res.ok) console.warn('Supabase PATCH erro:', res.status);
-  } catch(e) { console.warn('Supabase offline, salvo localmente.'); }
-}
-
-async function salvarVideosSupabase() {
-  if (!SUPABASE_URL || !SUPABASE_KEY) return;
-  try {
-    // Deleta todos e reinsere na ordem atual
-    await fetch(SUPABASE_URL + '/rest/v1/videos', {
-      method: 'DELETE',
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': 'Bearer ' + SUPABASE_KEY,
-        'Content-Type': 'application/json'
-      }
-    });
-    if (!dados.videos.length) return;
-    var rows = dados.videos.map(function(v, i) {
-      return {
-        plataforma: v.plataforma || 'vimeo',
-        vimeo_id:   v.plataforma === 'vimeo'    ? v.id : null,
-        youtube_id: v.plataforma === 'youtube'  ? v.id : null,
-        nome:  v.nome  || '',
-        cargo: v.cargo || '',
-        thumb: v.thumb || '',
-        ordem: i,
-        ativo: true
-      };
-    });
-    await fetch(SUPABASE_URL + '/rest/v1/videos', {
-      method: 'POST',
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': 'Bearer ' + SUPABASE_KEY,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify(rows)
-    });
-  } catch(e) { console.warn('Supabase offline:', e); }
-}
-
-async function carregarDoSupabase() {
-  if (!SUPABASE_URL || !SUPABASE_KEY) return;
-  try {
-    // Carregar conteúdo
-    var resC = await fetch(SUPABASE_URL + '/rest/v1/conteudo?select=secao,dados', {
-      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-    });
-    if (resC.ok) {
-      var rows = await resC.json();
-      rows.forEach(function(row) {
-        if (dados[row.secao] !== undefined) {
-          dados[row.secao] = typeof row.dados === 'string' ? JSON.parse(row.dados) : row.dados;
-          localStorage.setItem('nl_' + row.secao, JSON.stringify(dados[row.secao]));
-        }
-      });
-    }
-    // Carregar vídeos
-    var resV = await fetch(SUPABASE_URL + '/rest/v1/videos?select=*&order=ordem.asc&ativo=eq.true', {
-      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-    });
-    if (resV.ok) {
-      var vids = await resV.json();
-      dados.videos = vids.map(function(v) {
-        return {
-          id:         v.plataforma === 'vimeo' ? v.vimeo_id : v.youtube_id,
-          plataforma: v.plataforma,
-          nome:       v.nome,
-          cargo:      v.cargo,
-          thumb:      v.thumb
-        };
-      });
-      localStorage.setItem('nl_videos', JSON.stringify(dados.videos));
-    }
-  } catch(e) { console.warn('Erro ao carregar Supabase:', e); }
 }
 
 function salvarConfig() {
   SUPABASE_URL = document.getElementById('sb-url').value.trim();
   SUPABASE_KEY = document.getElementById('sb-key').value.trim();
-  localStorage.setItem('sb_url', SUPABASE_URL);
-  localStorage.setItem('sb_key', SUPABASE_KEY);
+  try {
+    localStorage.setItem('sb_url', SUPABASE_URL);
+    localStorage.setItem('sb_key', SUPABASE_KEY);
+  } catch(e) {}
   toast('Configuração salva! ✓');
 }
 
 async function testarConexao() {
   if (!SUPABASE_URL || !SUPABASE_KEY) { toast('Preencha URL e Key primeiro.', true); return; }
   try {
-    var r = await fetch(SUPABASE_URL + '/rest/v1/', {
+    var r = await fetch(SUPABASE_URL + '/rest/v1/conteudo?select=secao&limit=1', {
       headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
     });
-    if (r.ok || r.status === 404) toast('Conexão OK! ✓');
+    if (r.ok) toast('Conexão OK! ✓');
     else toast('Erro: ' + r.status, true);
   } catch(e) { toast('Não foi possível conectar.', true); }
 }
@@ -1206,10 +1126,81 @@ function trocarSenha() {
   var conf = document.getElementById('conf-senha').value;
   if (!nova) { toast('Digite a nova senha.', true); return; }
   if (nova !== conf) { toast('As senhas não coincidem.', true); return; }
-  localStorage.setItem('nl_senha', nova);
+  try { localStorage.setItem('nl_senha', nova); } catch(e) {}
   document.getElementById('nova-senha').value = '';
   document.getElementById('conf-senha').value = '';
   toast('Senha alterada! ✓');
+}
+
+// ══════════════════════════════════════════
+// SUPABASE
+// ══════════════════════════════════════════
+async function carregarDoSupabase() {
+  if (!SUPABASE_URL || !SUPABASE_KEY) return;
+  var headers = { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY };
+  // Conteúdo
+  var resC = await fetch(SUPABASE_URL + '/rest/v1/conteudo?select=secao,dados', { headers: headers });
+  if (resC.ok) {
+    var rows = await resC.json();
+    rows.forEach(function(row) {
+      if (dados[row.secao] !== undefined) {
+        dados[row.secao] = typeof row.dados === 'string' ? JSON.parse(row.dados) : row.dados;
+        ls_set('nl_' + row.secao, dados[row.secao]);
+      }
+    });
+  }
+  // Vídeos
+  var resV = await fetch(SUPABASE_URL + '/rest/v1/videos?select=*&order=ordem.asc&ativo=eq.true', { headers: headers });
+  if (resV.ok) {
+    var vids = await resV.json();
+    if (vids.length) {
+      dados.videos = vids.map(function(v) {
+        return {
+          id: v.plataforma === 'vimeo' ? v.vimeo_id : v.youtube_id,
+          plataforma: v.plataforma,
+          nome: v.nome, cargo: v.cargo, thumb: v.thumb
+        };
+      });
+      ls_set('nl_videos', dados.videos);
+    }
+  }
+}
+
+async function salvarSupabase(secao) {
+  if (!SUPABASE_URL || !SUPABASE_KEY) return;
+  try {
+    await fetch(SUPABASE_URL + '/rest/v1/conteudo?secao=eq.' + secao, {
+      method: 'PATCH',
+      headers: {
+        'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY,
+        'Content-Type': 'application/json', 'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ dados: dados[secao], atualizado_em: new Date().toISOString() })
+    });
+  } catch(e) { console.warn('Supabase offline.'); }
+}
+
+async function salvarVideosSupabase() {
+  if (!SUPABASE_URL || !SUPABASE_KEY) return;
+  try {
+    var headers = { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' };
+    await fetch(SUPABASE_URL + '/rest/v1/videos', { method: 'DELETE', headers: headers });
+    if (!dados.videos.length) return;
+    var rows = dados.videos.map(function(v, i) {
+      return {
+        plataforma: v.plataforma || 'vimeo',
+        vimeo_id:   v.plataforma === 'vimeo' ? v.id : null,
+        youtube_id: v.plataforma === 'youtube' ? v.id : null,
+        nome: v.nome || '', cargo: v.cargo || '', thumb: v.thumb || '',
+        ordem: i, ativo: true
+      };
+    });
+    await fetch(SUPABASE_URL + '/rest/v1/videos', {
+      method: 'POST',
+      headers: Object.assign({}, headers, { 'Prefer': 'return=minimal' }),
+      body: JSON.stringify(rows)
+    });
+  } catch(e) { console.warn('Supabase offline:', e); }
 }
 
 // ══════════════════════════════════════════
