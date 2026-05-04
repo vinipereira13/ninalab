@@ -596,20 +596,12 @@ main {
         <div class="card">
           <div class="card-title">🏠 Texto principal</div>
           <div class="field">
-            <label>Letra inicial (fica em rosa)</label>
-            <input type="text" id="hero-linha1" placeholder="s">
-          </div>
-          <div class="field">
-            <label>Linha 1 completa (sem a letra inicial)</label>
-            <input type="text" id="hero-linha2" placeholder="eu mandato">
+            <label>Linha 1</label>
+            <input type="text" id="hero-linha2" placeholder="seu mandato">
           </div>
           <div class="field">
             <label>Linha 2</label>
             <input type="text" id="hero-linha3" placeholder="em modo">
-          </div>
-          <div class="field">
-            <label>Texto do toggle (pill)</label>
-            <input type="text" id="hero-toggle" placeholder="on">
           </div>
           <div class="field">
             <label>Texto do botão "Solicite uma proposta"</label>
@@ -921,10 +913,8 @@ function carregarTudo() {
 function preencherCampos() {
   // Hero
   var h = dados.hero;
-  document.getElementById('hero-linha1').value = h.linha1 || '';
   document.getElementById('hero-linha2').value = h.linha2 || '';
   document.getElementById('hero-linha3').value = h.linha3 || '';
-  document.getElementById('hero-toggle').value = h.toggle || '';
   document.getElementById('hero-btn').value = h.btn || '';
 
   // Sobre
@@ -1054,10 +1044,10 @@ function renderizarServicos() {
 function salvar(secao) {
   if (secao === 'hero') {
     dados.hero = {
-      linha1: document.getElementById('hero-linha1').value,
+      linha1: 's',
       linha2: document.getElementById('hero-linha2').value,
       linha3: document.getElementById('hero-linha3').value,
-      toggle: document.getElementById('hero-toggle').value,
+      toggle: 'on',
       btn: document.getElementById('hero-btn').value
     };
   } else if (secao === 'sobre') {
