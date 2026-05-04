@@ -23,13 +23,14 @@ nav .nav-right{display:flex;justify-content:flex-end}
 .nav-logo{height:38px;width:auto;display:block}
 .btn-proposta{border:1.5px solid rgba(255,255,255,0.3);color:#fff !important;background:transparent;padding:9px 22px;border-radius:100px;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;white-space:nowrap;transition:all 0.2s}
 .btn-proposta:hover{background:#FF88AF;border-color:#FF88AF}
-.hero{min-height:100vh;min-height:100svh;display:flex;align-items:center;padding:80px 6vw 0;position:relative;overflow:hidden;background:url('BG%20NINA.jpg') center/cover no-repeat #111011}
+.hero{min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-content:center;padding:80px 6vw 0;position:relative;overflow:hidden;background:url('BG%20NINA.jpg') center/cover no-repeat #111011}
+.hero-content{display:flex;flex-direction:column;align-items:center;text-align:center;z-index:1;position:relative;gap:0}.hero-titulo{margin-bottom:24px !important}.hero-svg{margin-top:-12px}
+.hero-titulo{font-family:'NorthSeano',sans-serif !important;font-size:clamp(56px,9vw,130px);line-height:1.1;font-weight:normal;color:#ffffff !important;margin-bottom:48px;letter-spacing:-0.01em}
+.hero-svg{width:clamp(120px,16vw,240px)}
+.hero-svg svg{width:100%;height:auto;display:block}
 .hero::before,.hero::after{display:none}
-.hero-titulo{font-family:'NorthSeano',sans-serif !important;font-size:clamp(72px,11vw,140px);line-height:0.93;font-weight:normal;margin-bottom:44px;position:relative;z-index:1;color:#fff !important}
 .hero-titulo .rosa{color:#FF88AF !important}
-.toggle{display:inline-flex;align-items:center;gap:14px;background:#fff;border-radius:100px;padding:10px 14px 10px 24px;position:relative;z-index:1}
 .toggle-on{font-family:'Aminute',cursive !important;color:#FF88AF;font-size:30px;line-height:1}
-.toggle-bolinha{width:46px;height:46px;background:#E1EA28;border-radius:50%}
 section{padding:96px 6vw}
 .titulo-secao{font-size:clamp(32px,4vw,52px);font-weight:700;letter-spacing:-0.02em;line-height:1.1;margin-bottom:48px;color:#fff !important}
 .ticker-wrap{overflow:hidden;background:#FF88AF;padding:13px 0;width:100%}
@@ -141,9 +142,36 @@ var SB_KEY="sb_publishable_8nguAxVYYgRbtifxN-6TMA_M0p605cA";
 </nav>
 
 <section class="hero" id="inicio">
-  <div>
-    <h1 class="hero-titulo"><span class="rosa">s</span>eu<br>mandato<br>em modo</h1>
-    <div class="toggle"><span class="toggle-on">on</span><div class="toggle-bolinha"></div></div>
+  <div class="hero-content">
+    <h1 class="hero-titulo">seu mandato<br>em modo</h1>
+    <div class="hero-svg">
+      <?xml version="1.0" encoding="UTF-8"?>
+<svg id="Camada_2" data-name="Camada 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1009 518.19">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #dde628;
+      }
+
+      .cls-2 {
+        fill: #fff;
+      }
+
+      .cls-3 {
+        fill: #ff84ab;
+      }
+    </style>
+  </defs>
+  <g id="Camada_1-2" data-name="Camada 1">
+    <path class="cls-2" d="M933.11,75.89C884.18,26.95,819.11,0,749.91,0c-.19,0-.39,0-.58,0-.13,0-.27,0-.4,0h-490.81c-.24,0-.48,0-.71.02C188.66.45,124.1,27.51,75.55,76.23,26.83,125.13,0,190.07,0,259.09s26.83,133.97,75.55,182.86c48.55,48.73,113.11,75.78,181.86,76.22.24.01.47.02.71.02h490.81c.13,0,.27,0,.4,0,.19,0,.39,0,.58,0,69.21,0,134.27-26.95,183.21-75.89,48.94-48.94,75.89-114,75.89-183.21s-26.95-134.27-75.89-183.21ZM928.96,438.15c-47.83,47.83-111.42,74.17-179.06,74.17-.21,0-.41,0-.62,0-.12,0-.24,0-.36,0h-490.81c-.18,0-.37,0-.55-.02-67.24-.4-130.38-26.84-177.87-74.49C32.09,390.03,5.87,326.56,5.87,259.09s26.22-130.93,73.84-178.72C127.18,32.72,190.33,6.28,257.57,5.88c.18-.01.36-.02.55-.02h490.81c.12,0,.24,0,.36,0,.21,0,.41,0,.62,0,67.64,0,131.23,26.34,179.06,74.17,47.83,47.83,74.17,111.42,74.17,179.06s-26.34,131.23-74.17,179.06Z"/>
+    <rect class="cls-2" x="258.12" y="15.64" width="490.81" height="486.9"/>
+    <circle class="cls-2" cx="259.09" cy="259.09" r="243.45"/>
+    <circle class="cls-2" cx="749.91" cy="259.09" r="243.45"/>
+    <circle class="cls-1" cx="749.91" cy="259.09" r="190.65"/>
+    <path class="cls-3" d="M236.25,291.1c12.86-.55,26.37-3.55,40.44-8.82-10.58,49.27-52.7,86.21-102.99,86.21-58.25,0-105.61-49.49-105.61-110.34,0-53.86,40.7-98.85,89.62-108.45l-.69,36.06c-30.54,8.03-53.36,37.32-53.36,72.38,0,41.21,31.41,74.75,70.02,74.75,27.48,0,51.09-17.14,62.56-41.78ZM502.54,255.27v112.68h-34.67v-112.68c0-34.88-28.27-63.15-63.15-63.15v.09c-7.16-.02-18.5-.85-32.85,9.14l-.04-.03c-68.44,53.83-106.42,77.14-140.16,77.14-21.95,0-38.83-7.99-51.52-18.43-11.32-9.31-18.32-23.16-19.17-38-.85-14.75,4.47-29.21,14.6-39.68,8.63-8.93,24.39-17.84,42.92-15.98,9.27.9,21.89,4.99,33.21,17.94l.05-.05c6.95,6.55,19.35,28.15,25.15,41.43,9.81-5.93,19.85-12.9,30.01-20.33v-47.69h34.67v21.96c3.66-2.67,7.33-5.3,10.97-7.84,22.52-15.65,52.14-14.23,52.14-14.23h1.01c54.02,0,96.84,43.69,96.82,97.72ZM243.1,240.99c-2.46-9.74-9.85-23.18-14.25-29.68l-.02.02c-4.14-6.45-8.77-9.97-13.73-10.45-5.48-.59-11.58,2.46-14.58,5.57-3.48,3.59-5.22,8.41-4.92,13.59.29,5.2,2.69,10,6.57,13.19,12.17,9.99,26,11.49,40.93,7.77ZM306.91,267.98c11.62-6.67,23.54-14.7,35.83-24.22-.69,3.76-1.16,7.63-1.16,11.6v112.68h-34.67v-100.06Z"/>
+  </g>
+</svg>
+    </div>
   </div>
 </section>
 
