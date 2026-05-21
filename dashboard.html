@@ -574,8 +574,19 @@ main {
               </div>
             </div>
             <div class="field">
-              <label>Thumbnail (URL da imagem — opcional)</label>
-              <input type="text" id="add-thumb" placeholder="Deixe vazio para usar thumbnail automática">
+              <label>Thumbnail</label>
+              <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:10px">
+                <input type="text" id="add-thumb" placeholder="URL da imagem (opcional)" style="flex:1;min-width:200px">
+                <span style="color:var(--text-dim);font-size:12px">ou</span>
+                <label style="cursor:pointer;background:var(--cinza3);border:1px solid var(--brd);border-radius:8px;padding:9px 16px;font-size:13px;color:var(--branco);white-space:nowrap;text-transform:none;letter-spacing:0;font-weight:500">
+                  📁 Subir arquivo
+                  <input type="file" id="add-thumb-file" accept="image/*" style="display:none" onchange="previewAddThumb()">
+                </label>
+              </div>
+              <div style="display:flex;gap:12px;align-items:center">
+                <img id="add-thumb-preview" src="" style="width:80px;height:60px;object-fit:cover;border-radius:8px;border:1px solid var(--brd);display:none">
+                <span id="add-thumb-preview-label" style="font-size:11px;color:var(--text-dim);display:none">Preview da thumbnail</span>
+              </div>
             </div>
             <div style="display:flex;gap:10px;margin-top:12px;">
               <button class="btn-salvar" onclick="salvarVideo()">✓ Adicionar</button>
@@ -1079,6 +1090,10 @@ function fecharFormVideo() {
   ['add-id', 'add-nome', 'add-cargo', 'add-thumb'].forEach(function(id) {
     document.getElementById(id).value = '';
   });
+  _addThumbBase64 = '';
+  document.getElementById('add-thumb-preview').style.display = 'none';
+  document.getElementById('add-thumb-preview-label').style.display = 'none';
+  document.getElementById('add-thumb-file').value = '';
 }
 
 function atualizarPlataforma() {
@@ -1087,13 +1102,30 @@ function atualizarPlataforma() {
   document.getElementById('add-id').placeholder = plat === 'vimeo' ? 'Ex: 1188104112' : 'Ex: dQw4w9WgXcQ';
 }
 
+var _addThumbBase64 = '';
+
+function previewAddThumb() {
+  var file = document.getElementById('add-thumb-file').files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    _addThumbBase64 = e.target.result;
+    document.getElementById('add-thumb-preview').src = e.target.result;
+    document.getElementById('add-thumb-preview').style.display = 'block';
+    document.getElementById('add-thumb-preview-label').style.display = 'block';
+    document.getElementById('add-thumb').value = '';
+  };
+  reader.readAsDataURL(file);
+}
+
 function salvarVideo() {
   var id = document.getElementById('add-id').value.trim();
   var nome = document.getElementById('add-nome').value.trim();
   var cargo = document.getElementById('add-cargo').value.trim();
-  var thumb = document.getElementById('add-thumb').value.trim();
+  var thumbUrl = document.getElementById('add-thumb').value.trim();
   var plat = document.getElementById('add-plataforma').value;
   if (!id) { toast('Informe o ID do vídeo', true); return; }
+  var thumb = _addThumbBase64 || thumbUrl;
   dados.videos.push({ id: id, nome: nome, cargo: cargo, thumb: thumb, plataforma: plat });
   ls_set('nl_videos', dados.videos);
   salvarVideosSupabase();
