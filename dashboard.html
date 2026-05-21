@@ -6,806 +6,266 @@
 <title>Nina Lab — Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --preto:#111011;--rosa:#FF88AF;--rosa-d:#e0709a;--branco:#ffffff;
+  --cinza:#1a181a;--cinza2:#232123;--cinza3:#2e2c2e;
+  --brd:rgba(255,255,255,0.07);--dim:rgba(255,255,255,0.45);
+}
+body{font-family:'Space Grotesk',sans-serif;background:var(--preto);color:var(--branco);min-height:100vh}
 
-:root {
-  --preto: #111011;
-  --rosa: #FF88AF;
-  --rosa-d: #e0709a;
-  --branco: #ffffff;
-  --cinza: #1a181a;
-  --cinza2: #232123;
-  --cinza3: #2e2c2e;
-  --brd: rgba(255,255,255,0.07);
-  --text-dim: rgba(255,255,255,0.45);
-}
+/* LOGIN */
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center}
+.login-box{background:var(--cinza);border:1px solid var(--brd);border-radius:20px;padding:48px 40px;width:100%;max-width:400px;text-align:center}
+.login-logo{font-size:28px;font-weight:800;letter-spacing:-0.02em;margin-bottom:8px}
+.login-logo span{color:var(--rosa)}
+.login-sub{font-size:13px;color:var(--dim);margin-bottom:36px}
+.login-box input{width:100%;background:var(--cinza2);border:1.5px solid var(--brd);border-radius:10px;padding:14px 18px;font-size:15px;font-family:inherit;color:var(--branco);outline:none;margin-bottom:12px;transition:border-color 0.2s;text-align:center;letter-spacing:0.1em}
+.login-box input:focus{border-color:var(--rosa)}
+.login-box input::placeholder{color:var(--dim);letter-spacing:0}
+.btn-login{width:100%;background:var(--rosa);color:white;border:none;border-radius:100px;padding:14px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;transition:all 0.2s;margin-top:4px}
+.btn-login:hover{background:var(--rosa-d)}
+.login-erro{font-size:13px;color:#ff6b6b;margin-top:12px;display:none}
 
-body {
-  font-family: 'Space Grotesk', sans-serif;
-  background: var(--preto);
-  color: var(--branco);
-  min-height: 100vh;
-}
+/* APP */
+#app{display:none}
+.layout{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+aside{background:var(--cinza);border-right:1px solid var(--brd);padding:32px 0;position:sticky;top:0;height:100vh;display:flex;flex-direction:column}
+.aside-logo{padding:0 24px 32px;border-bottom:1px solid var(--brd);font-size:20px;font-weight:800;letter-spacing:-0.02em}
+.aside-logo span{color:var(--rosa)}
+nav{flex:1;padding:16px 12px;display:flex;flex-direction:column;gap:4px}
+.nav-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:500;color:var(--dim);transition:all 0.15s;border:none;background:transparent;font-family:inherit;width:100%;text-align:left}
+.nav-item:hover{background:var(--cinza2);color:var(--branco)}
+.nav-item.active{background:rgba(255,136,175,0.12);color:var(--rosa)}
+.aside-footer{padding:16px 24px;border-top:1px solid var(--brd)}
+.btn-sair{font-size:12px;color:var(--dim);background:none;border:none;cursor:pointer;font-family:inherit;transition:color 0.2s}
+.btn-sair:hover{color:var(--branco)}
 
-/* ── LOGIN ── */
-#login-screen {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--preto);
-}
-.login-box {
-  background: var(--cinza);
-  border: 1px solid var(--brd);
-  border-radius: 20px;
-  padding: 48px 40px;
-  width: 100%;
-  max-width: 400px;
-  text-align: center;
-}
-.login-logo {
-  font-size: 28px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  margin-bottom: 8px;
-}
-.login-logo span { color: var(--rosa); }
-.login-sub {
-  font-size: 13px;
-  color: var(--text-dim);
-  margin-bottom: 36px;
-}
-.login-box input {
-  width: 100%;
-  background: var(--cinza2);
-  border: 1.5px solid var(--brd);
-  border-radius: 10px;
-  padding: 14px 18px;
-  font-size: 15px;
-  font-family: inherit;
-  color: var(--branco);
-  outline: none;
-  margin-bottom: 12px;
-  transition: border-color 0.2s;
-  text-align: center;
-  letter-spacing: 0.1em;
-}
-.login-box input:focus { border-color: var(--rosa); }
-.login-box input::placeholder { color: var(--text-dim); letter-spacing: 0; }
-.btn-login {
-  width: 100%;
-  background: var(--rosa);
-  color: white;
-  border: none;
-  border-radius: 100px;
-  padding: 14px;
-  font-size: 15px;
-  font-weight: 600;
-  font-family: inherit;
-  cursor: pointer;
-  transition: all 0.2s;
-  margin-top: 4px;
-}
-.btn-login:hover { background: var(--rosa-d); }
-.login-erro {
-  font-size: 13px;
-  color: #ff6b6b;
-  margin-top: 12px;
-  display: none;
-}
+main{padding:40px 48px;overflow-y:auto}
+.page-title{font-size:26px;font-weight:700;letter-spacing:-0.02em;margin-bottom:6px}
+.page-sub{font-size:13px;color:var(--dim);margin-bottom:36px}
+.card{background:var(--cinza);border:1px solid var(--brd);border-radius:16px;padding:28px;margin-bottom:20px}
+.card-title{font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--rosa);margin-bottom:20px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--dim);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:7px}
+.field input,.field textarea,.field select{width:100%;background:var(--cinza2);border:1.5px solid var(--brd);border-radius:10px;padding:12px 16px;font-size:14px;font-family:inherit;color:var(--branco);outline:none;transition:border-color 0.2s;resize:vertical}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--rosa)}
+.field input::placeholder,.field textarea::placeholder{color:rgba(255,255,255,0.2)}
+.field select option{background:var(--cinza2)}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.actions{display:flex;align-items:center;gap:12px;margin-top:24px;padding-top:20px;border-top:1px solid var(--brd)}
+.btn-salvar{background:var(--rosa);color:white;border:none;border-radius:100px;padding:12px 28px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;gap:8px}
+.btn-salvar:hover{background:var(--rosa-d);transform:translateY(-1px)}
+.btn-salvar:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.btn-sec{background:transparent;color:var(--dim);border:1.5px solid var(--brd);border-radius:100px;padding:11px 22px;font-size:13px;font-weight:500;font-family:inherit;cursor:pointer;transition:all 0.2s}
+.btn-sec:hover{border-color:rgba(255,255,255,0.25);color:var(--branco)}
+.btn-del{background:transparent;color:#ff6b6b;border:1.5px solid rgba(255,107,107,0.3);border-radius:100px;padding:8px 16px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;transition:all 0.2s}
+.btn-del:hover{background:rgba(255,107,107,0.1)}
+.pagina{display:none}
+.pagina.ativa{display:block}
+.toast{position:fixed;bottom:32px;right:32px;background:var(--cinza3);border:1px solid var(--brd);border-left:3px solid var(--rosa);border-radius:12px;padding:14px 20px;font-size:14px;font-weight:500;z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.erro{border-left-color:#ff6b6b}
+.empty-state{text-align:center;padding:40px 20px;color:var(--dim)}
+.empty-state .icon{font-size:40px;margin-bottom:12px}
+.empty-state p{font-size:14px}
 
-/* ── APP ── */
-#app { display: none; }
+/* VIDEO LIST */
+.video-item{background:var(--cinza2);border:1px solid var(--brd);border-radius:12px;padding:16px 20px;display:grid;grid-template-columns:auto 1fr auto auto;gap:16px;align-items:center;margin-bottom:8px}
+.video-thumb{width:64px;height:64px;border-radius:8px;object-fit:cover;background:var(--cinza3)}
+.video-info h4{font-size:14px;font-weight:600;margin-bottom:3px}
+.video-info p{font-size:12px;color:var(--dim)}
+.video-badge{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:rgba(255,136,175,0.15);color:var(--rosa);padding:3px 8px;border-radius:100px;white-space:nowrap}
+.video-acoes{display:flex;gap:8px}
+.form-edicao{background:var(--cinza2);border:1px solid var(--brd);border-radius:12px;padding:20px;margin-bottom:12px;display:none}
+.form-edicao.aberto{display:block}
+.btn-upload{cursor:pointer;background:var(--cinza3);border:1px solid var(--brd);border-radius:8px;padding:8px 14px;font-size:12px;color:var(--branco);white-space:nowrap;font-weight:500}
+.btn-add-video{width:100%;background:transparent;border:1.5px dashed rgba(255,255,255,0.15);border-radius:12px;padding:16px;color:var(--dim);font-size:14px;font-family:inherit;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px}
+.btn-add-video:hover{border-color:var(--rosa);color:var(--rosa)}
+.form-add{background:var(--cinza2);border:1px solid var(--brd);border-radius:12px;padding:20px;margin-bottom:12px;display:none}
+.form-add.aberto{display:block}
+.thumb-prev{width:90px;height:68px;object-fit:cover;border-radius:8px;border:1px solid var(--brd);margin-top:8px}
 
-/* sidebar */
-.layout {
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  min-height: 100vh;
-}
-
-aside {
-  background: var(--cinza);
-  border-right: 1px solid var(--brd);
-  padding: 32px 0;
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.aside-logo {
-  padding: 0 24px 32px;
-  border-bottom: 1px solid var(--brd);
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-}
-.aside-logo span { color: var(--rosa); }
-
-nav {
-  flex: 1;
-  padding: 16px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 11px 14px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text-dim);
-  transition: all 0.15s;
-  border: none;
-  background: transparent;
-  font-family: inherit;
-  width: 100%;
-  text-align: left;
-}
-.nav-item:hover { background: var(--cinza2); color: var(--branco); }
-.nav-item.active { background: rgba(255,136,175,0.12); color: var(--rosa); }
-.nav-icon { font-size: 16px; width: 20px; text-align: center; }
-
-.aside-footer {
-  padding: 16px 24px;
-  border-top: 1px solid var(--brd);
-}
-.btn-sair {
-  font-size: 12px;
-  color: var(--text-dim);
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-family: inherit;
-  transition: color 0.2s;
-}
-.btn-sair:hover { color: var(--branco); }
-
-/* main */
-main {
-  padding: 40px 48px;
-  overflow-y: auto;
-}
-
-.page-title {
-  font-size: 26px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  margin-bottom: 6px;
-}
-.page-sub {
-  font-size: 13px;
-  color: var(--text-dim);
-  margin-bottom: 36px;
-}
-
-/* cards de seção */
-.card {
-  background: var(--cinza);
-  border: 1px solid var(--brd);
-  border-radius: 16px;
-  padding: 28px;
-  margin-bottom: 20px;
-}
-.card-title {
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--rosa);
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* campos */
-.field {
-  margin-bottom: 16px;
-}
-.field label {
-  display: block;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-dim);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  margin-bottom: 7px;
-}
-.field input,
-.field textarea,
-.field select {
-  width: 100%;
-  background: var(--cinza2);
-  border: 1.5px solid var(--brd);
-  border-radius: 10px;
-  padding: 12px 16px;
-  font-size: 14px;
-  font-family: inherit;
-  color: var(--branco);
-  outline: none;
-  transition: border-color 0.2s;
-  resize: vertical;
-}
-.field input:focus,
-.field textarea:focus,
-.field select:focus { border-color: var(--rosa); }
-.field input::placeholder,
-.field textarea::placeholder { color: rgba(255,255,255,0.2); }
-.field select option { background: var(--cinza2); }
-.field-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-.field-row-3 {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 16px;
-}
-
-/* botões */
-.btn-salvar {
-  background: var(--rosa);
-  color: white;
-  border: none;
-  border-radius: 100px;
-  padding: 12px 28px;
-  font-size: 14px;
-  font-weight: 600;
-  font-family: inherit;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-.btn-salvar:hover { background: var(--rosa-d); transform: translateY(-1px); }
-.btn-salvar:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-.btn-secundario {
-  background: transparent;
-  color: var(--text-dim);
-  border: 1.5px solid var(--brd);
-  border-radius: 100px;
-  padding: 11px 22px;
-  font-size: 13px;
-  font-weight: 500;
-  font-family: inherit;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.btn-secundario:hover { border-color: rgba(255,255,255,0.25); color: var(--branco); }
-
-.btn-perigo {
-  background: transparent;
-  color: #ff6b6b;
-  border: 1.5px solid rgba(255,107,107,0.3);
-  border-radius: 100px;
-  padding: 8px 16px;
-  font-size: 12px;
-  font-weight: 600;
-  font-family: inherit;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.btn-perigo:hover { background: rgba(255,107,107,0.1); }
-
-.actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid var(--brd);
-}
-
-/* toast */
-.toast {
-  position: fixed;
-  bottom: 32px;
-  right: 32px;
-  background: var(--cinza3);
-  border: 1px solid var(--brd);
-  border-left: 3px solid var(--rosa);
-  border-radius: 12px;
-  padding: 14px 20px;
-  font-size: 14px;
-  font-weight: 500;
-  z-index: 9999;
-  transform: translateY(80px);
-  opacity: 0;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  pointer-events: none;
-}
-.toast.show { transform: translateY(0); opacity: 1; }
-.toast.erro { border-left-color: #ff6b6b; }
-
-/* ── SEÇÃO VÍDEOS ── */
-.video-lista {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-.video-item {
-  background: var(--cinza2);
-  border: 1px solid var(--brd);
-  border-radius: 12px;
-  padding: 16px 20px;
-  display: grid;
-  grid-template-columns: auto 1fr auto auto;
-  gap: 16px;
-  align-items: center;
-}
-.video-thumb {
-  width: 60px;
-  height: 60px;
-  border-radius: 8px;
-  background: var(--cinza3);
-  object-fit: cover;
-  display: block;
-}
-.video-info h4 { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
-.video-info p { font-size: 12px; color: var(--text-dim); }
-.video-badge {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  background: rgba(255,136,175,0.15);
-  color: var(--rosa);
-  padding: 3px 8px;
-  border-radius: 100px;
-  white-space: nowrap;
-}
-.video-acoes { display: flex; gap: 8px; }
-
-.btn-add-video {
-  width: 100%;
-  background: transparent;
-  border: 1.5px dashed rgba(255,255,255,0.15);
-  border-radius: 12px;
-  padding: 16px;
-  color: var(--text-dim);
-  font-size: 14px;
-  font-family: inherit;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-.btn-add-video:hover { border-color: var(--rosa); color: var(--rosa); }
-
-/* form add video */
-.form-add-video {
-  background: var(--cinza2);
-  border: 1px solid var(--brd);
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 12px;
-  display: none;
-}
-.form-add-video.aberto { display: block; }
-
-/* páginas */
-.pagina { display: none; }
-.pagina.ativa { display: block; }
-
-/* status */
-.status-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 4px 10px;
-  border-radius: 100px;
-}
-.status-ok { background: rgba(46,213,115,0.12); color: #2ed573; }
-.status-off { background: rgba(255,255,255,0.06); color: var(--text-dim); }
-
-/* config supabase */
-.supabase-info {
-  background: rgba(255,136,175,0.06);
-  border: 1px solid rgba(255,136,175,0.15);
-  border-radius: 12px;
-  padding: 16px 20px;
-  font-size: 13px;
-  color: rgba(255,255,255,0.7);
-  margin-bottom: 20px;
-  line-height: 1.6;
-}
-.supabase-info strong { color: var(--rosa); }
-
-/* toggle */
-.toggle-field {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--brd);
-}
-.toggle-field:last-child { border-bottom: none; }
-.toggle-label { font-size: 14px; font-weight: 500; }
-.toggle-desc { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
-.toggle-switch {
-  width: 44px;
-  height: 24px;
-  background: var(--cinza3);
-  border-radius: 100px;
-  cursor: pointer;
-  position: relative;
-  transition: background 0.2s;
-  flex-shrink: 0;
-  border: none;
-}
-.toggle-switch.on { background: var(--rosa); }
-.toggle-switch::after {
-  content: '';
-  position: absolute;
-  width: 18px; height: 18px;
-  background: white;
-  border-radius: 50%;
-  top: 3px; left: 3px;
-  transition: left 0.2s;
-}
-.toggle-switch.on::after { left: 23px; }
-
-/* seção vazia */
-.empty-state {
-  text-align: center;
-  padding: 40px 20px;
-  color: var(--text-dim);
-}
-.empty-state .icon { font-size: 40px; margin-bottom: 12px; }
-.empty-state p { font-size: 14px; }
-
-@media (max-width: 900px) {
-  .layout { grid-template-columns: 1fr; }
-  aside { display: none; }
-  main { padding: 24px 20px; }
-  .field-row, .field-row-3 { grid-template-columns: 1fr; }
-}
+@media(max-width:900px){.layout{grid-template-columns:1fr}aside{display:none}main{padding:24px 20px}.field-row,.field-row-3{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-box">
     <div class="login-logo"><span>n</span>ina lab</div>
     <p class="login-sub">Dashboard administrativo</p>
-    <input type="password" id="senha-input" placeholder="Digite a senha" autocomplete="current-password">
+    <input type="password" id="senha-input" placeholder="Digite a senha">
     <button class="btn-login" onclick="fazerLogin()">Entrar</button>
-    <p class="login-erro" id="login-erro">Senha incorreta. Tente novamente.</p>
+    <p class="login-erro" id="login-erro">Senha incorreta.</p>
   </div>
 </div>
 
-<!-- APP -->
 <div id="app">
   <div class="layout">
-
-    <!-- SIDEBAR -->
     <aside>
       <div class="aside-logo"><span>n</span>ina lab</div>
       <nav>
-        <button class="nav-item active" onclick="irPara('videos', this)">
-          <span class="nav-icon">🎬</span> Portfólio de Vídeos
-        </button>
-        <button class="nav-item" onclick="irPara('hero', this)">
-          <span class="nav-icon">🏠</span> Hero
-        </button>
-        <button class="nav-item" onclick="irPara('sobre', this)">
-          <span class="nav-icon">👥</span> Sobre
-        </button>
-        <button class="nav-item" onclick="irPara('servicos', this)">
-          <span class="nav-icon">⚡</span> Serviços
-        </button>
-        <button class="nav-item" onclick="irPara('instagram', this)">
-          <span class="nav-icon">📸</span> Instagram
-        </button>
-        <button class="nav-item" onclick="irPara('contato', this)">
-          <span class="nav-icon">📬</span> Contato
-        </button>
-        <button class="nav-item" onclick="irPara('config', this)">
-          <span class="nav-icon">⚙️</span> Configurações
-        </button>
+        <button class="nav-item active" onclick="irPara('videos',this)"><span>🎬</span> Portfólio</button>
+        <button class="nav-item" onclick="irPara('hero',this)"><span>🏠</span> Hero</button>
+        <button class="nav-item" onclick="irPara('sobre',this)"><span>👥</span> Sobre</button>
+        <button class="nav-item" onclick="irPara('servicos',this)"><span>⚡</span> Serviços</button>
+        <button class="nav-item" onclick="irPara('instagram',this)"><span>📸</span> Instagram</button>
+        <button class="nav-item" onclick="irPara('contato',this)"><span>📬</span> Contato</button>
+        <button class="nav-item" onclick="irPara('config',this)"><span>⚙️</span> Config</button>
       </nav>
-      <div class="aside-footer">
-        <button class="btn-sair" onclick="sair()">← Sair</button>
-      </div>
+      <div class="aside-footer"><button class="btn-sair" onclick="sair()">← Sair</button></div>
     </aside>
 
-    <!-- MAIN -->
     <main>
 
-      <!-- ── VÍDEOS ── -->
+      <!-- PORTFÓLIO -->
       <div class="pagina ativa" id="pag-videos">
         <h1 class="page-title">Portfólio de Vídeos</h1>
-        <p class="page-sub">Adicione, edite e reordene os vídeos do portfólio.</p>
-
+        <p class="page-sub">Adicione, edite e remova os vídeos do portfólio.</p>
         <div class="card">
           <div class="card-title">🎬 Vídeos publicados</div>
+          <div id="video-lista"></div>
 
-          <div class="video-lista" id="video-lista">
-            <div class="empty-state">
-              <div class="icon">🎬</div>
-              <p>Nenhum vídeo adicionado ainda.<br>Clique em "Adicionar vídeo" abaixo.</p>
-            </div>
-          </div>
-
-          <!-- Form add -->
-          <div class="form-add-video" id="form-add-video">
-            <div class="field-row">
+          <!-- Form adicionar -->
+          <div class="form-add" id="form-add">
+            <div class="field-row" style="margin-bottom:14px">
               <div class="field">
                 <label>Plataforma</label>
-                <select id="add-plataforma" onchange="atualizarPlataforma()">
+                <select id="add-plat" onchange="updAddLabel()">
                   <option value="vimeo">Vimeo</option>
                   <option value="youtube">YouTube</option>
                 </select>
               </div>
               <div class="field">
-                <label id="add-id-label">ID do Vimeo</label>
+                <label id="add-id-lbl">ID do Vimeo</label>
                 <input type="text" id="add-id" placeholder="Ex: 1188104112">
               </div>
             </div>
-            <div class="field-row">
-              <div class="field">
-                <label>Nome do candidato / projeto</label>
-                <input type="text" id="add-nome" placeholder="Ex: João Silva">
-              </div>
-              <div class="field">
-                <label>Cargo</label>
-                <input type="text" id="add-cargo" placeholder="Ex: Vereador">
-              </div>
+            <div class="field-row" style="margin-bottom:14px">
+              <div class="field"><label>Nome</label><input type="text" id="add-nome" placeholder="Ex: João Silva"></div>
+              <div class="field"><label>Cargo</label><input type="text" id="add-cargo" placeholder="Ex: Vereador"></div>
             </div>
-            <div class="field">
+            <div class="field" style="margin-bottom:14px">
               <label>Thumbnail</label>
-              <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:10px">
-                <input type="text" id="add-thumb" placeholder="URL da imagem (opcional)" style="flex:1;min-width:200px">
-                <span style="color:var(--text-dim);font-size:12px">ou</span>
-                <label style="cursor:pointer;background:var(--cinza3);border:1px solid var(--brd);border-radius:8px;padding:9px 16px;font-size:13px;color:var(--branco);white-space:nowrap;text-transform:none;letter-spacing:0;font-weight:500">
-                  📁 Subir arquivo
-                  <input type="file" id="add-thumb-file" accept="image/*" style="display:none" onchange="previewAddThumb()">
-                </label>
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px">
+                <input type="text" id="add-thumb-url" placeholder="URL da imagem (opcional)" style="flex:1;min-width:160px">
+                <label class="btn-upload">📁 Subir arquivo<input type="file" id="add-thumb-file" accept="image/*" style="display:none" onchange="prevAddThumb()"></label>
               </div>
-              <div style="display:flex;gap:12px;align-items:center">
-                <img id="add-thumb-preview" src="" style="width:80px;height:60px;object-fit:cover;border-radius:8px;border:1px solid var(--brd);display:none">
-                <span id="add-thumb-preview-label" style="font-size:11px;color:var(--text-dim);display:none">Preview da thumbnail</span>
-              </div>
+              <img id="add-thumb-prev" src="" style="width:90px;height:68px;object-fit:cover;border-radius:8px;border:1px solid var(--brd);display:none">
             </div>
-            <div style="display:flex;gap:10px;margin-top:12px;">
-              <button class="btn-salvar" onclick="salvarVideo()">✓ Adicionar</button>
-              <button class="btn-secundario" onclick="fecharFormVideo()">Cancelar</button>
+            <div style="display:flex;gap:10px">
+              <button class="btn-salvar" onclick="addVideo()">✓ Adicionar</button>
+              <button class="btn-sec" onclick="fecharAdd()">Cancelar</button>
             </div>
           </div>
 
-          <button class="btn-add-video" id="btn-add-video" onclick="abrirFormVideo()">
-            + Adicionar vídeo
-          </button>
+          <button class="btn-add-video" id="btn-add" onclick="abrirAdd()">+ Adicionar vídeo</button>
         </div>
       </div>
 
-      <!-- ── HERO ── -->
+      <!-- HERO -->
       <div class="pagina" id="pag-hero">
         <h1 class="page-title">Hero</h1>
-        <p class="page-sub">Seção inicial do site — o texto grande na tela de abertura.</p>
+        <p class="page-sub">Texto principal da seção inicial.</p>
         <div class="card">
-          <div class="card-title">🏠 Texto principal</div>
-          <div class="field">
-            <label>Linha 1</label>
-            <input type="text" id="hero-linha2" placeholder="seu mandato">
-          </div>
-          <div class="field">
-            <label>Linha 2</label>
-            <input type="text" id="hero-linha3" placeholder="em modo">
-          </div>
-          <div class="field">
-            <label>Texto do botão "Solicite uma proposta"</label>
-            <input type="text" id="hero-btn" placeholder="Solicite uma proposta">
-          </div>
-          <div class="actions">
-            <button class="btn-salvar" onclick="salvar('hero')">Salvar Hero</button>
-          </div>
+          <div class="card-title">🏠 Texto</div>
+          <div class="field"><label>Linha 1</label><input type="text" id="hero-l1" placeholder="seu mandato"></div>
+          <div class="field"><label>Linha 2</label><input type="text" id="hero-l2" placeholder="em modo"></div>
+          <div class="field"><label>Botão "Solicite uma proposta"</label><input type="text" id="hero-btn" placeholder="Solicite uma proposta"></div>
+          <div class="actions"><button class="btn-salvar" onclick="salvar('hero')">Salvar Hero</button></div>
         </div>
       </div>
 
-      <!-- ── SOBRE ── -->
+      <!-- SOBRE -->
       <div class="pagina" id="pag-sobre">
         <h1 class="page-title">Sobre</h1>
-        <p class="page-sub">Seção com foto, números e texto sobre a Nina Lab.</p>
-
+        <p class="page-sub">Números e textos da seção sobre.</p>
         <div class="card">
-          <div class="card-title">📊 Números (stats)</div>
+          <div class="card-title">📊 Números</div>
           <div class="field-row-3">
-            <div class="field">
-              <label>Número 1</label>
-              <input type="text" id="sobre-stat1-num" placeholder="+30">
-            </div>
-            <div class="field">
-              <label>Número 2</label>
-              <input type="text" id="sobre-stat2-num" placeholder="100%">
-            </div>
-            <div class="field">
-              <label>Número 3</label>
-              <input type="text" id="sobre-stat3-num" placeholder="+12">
-            </div>
+            <div class="field"><label>Número 1</label><input type="text" id="s1n" placeholder="+30"></div>
+            <div class="field"><label>Número 2</label><input type="text" id="s2n" placeholder="100%"></div>
+            <div class="field"><label>Número 3</label><input type="text" id="s3n" placeholder="+12"></div>
           </div>
           <div class="field-row-3">
-            <div class="field">
-              <label>Descrição 1</label>
-              <input type="text" id="sobre-stat1-desc" placeholder="Candidatos atendidos">
-            </div>
-            <div class="field">
-              <label>Descrição 2</label>
-              <input type="text" id="sobre-stat2-desc" placeholder="Dedicação ao seu mandato">
-            </div>
-            <div class="field">
-              <label>Descrição 3</label>
-              <input type="text" id="sobre-stat3-desc" placeholder="Anos de experiência">
-            </div>
+            <div class="field"><label>Descrição 1</label><input type="text" id="s1d" placeholder="Candidatos atendidos"></div>
+            <div class="field"><label>Descrição 2</label><input type="text" id="s2d" placeholder="Dedicação ao mandato"></div>
+            <div class="field"><label>Descrição 3</label><input type="text" id="s3d" placeholder="Anos de experiência"></div>
           </div>
         </div>
-
         <div class="card">
           <div class="card-title">📝 Textos</div>
-          <div class="field">
-            <label>Título</label>
-            <input type="text" id="sobre-titulo" placeholder="Do roteiro ao resultado. A Nina Lab faz tudo.">
-          </div>
-          <div class="field">
-            <label>Parágrafo 1</label>
-            <textarea id="sobre-p1" rows="3" placeholder="A Nina Lab oferece tudo que uma comunicação política precisa..."></textarea>
-          </div>
-          <div class="field">
-            <label>Parágrafo 2</label>
-            <textarea id="sobre-p2" rows="3" placeholder="Do Reels ao comercial de TV..."></textarea>
-          </div>
-          <div class="field">
-            <label>Texto do botão</label>
-            <input type="text" id="sobre-btn" placeholder="Solicite uma proposta ↗">
-          </div>
-          <div class="actions">
-            <button class="btn-salvar" onclick="salvar('sobre')">Salvar Sobre</button>
-          </div>
+          <div class="field"><label>Título</label><input type="text" id="s-titulo"></div>
+          <div class="field"><label>Parágrafo 1</label><textarea id="s-p1" rows="3"></textarea></div>
+          <div class="field"><label>Parágrafo 2</label><textarea id="s-p2" rows="3"></textarea></div>
+          <div class="field"><label>Texto do botão</label><input type="text" id="s-btn"></div>
+          <div class="actions"><button class="btn-salvar" onclick="salvar('sobre')">Salvar Sobre</button></div>
         </div>
       </div>
 
-      <!-- ── SERVIÇOS ── -->
+      <!-- SERVIÇOS -->
       <div class="pagina" id="pag-servicos">
         <h1 class="page-title">Serviços</h1>
-        <p class="page-sub">Os 5 serviços listados na seção de serviços.</p>
-
-        <div id="servicos-lista"></div>
-        <div class="actions">
-          <button class="btn-salvar" onclick="salvar('servicos')">Salvar Serviços</button>
-        </div>
+        <p class="page-sub">Nome e descrição de cada serviço.</p>
+        <div id="srv-lista"></div>
+        <div class="actions"><button class="btn-salvar" onclick="salvar('servicos')">Salvar Serviços</button></div>
       </div>
 
-      <!-- ── INSTAGRAM ── -->
+      <!-- INSTAGRAM -->
       <div class="pagina" id="pag-instagram">
         <h1 class="page-title">Instagram</h1>
-        <p class="page-sub">Seção de CTA para o Instagram do perfil.</p>
+        <p class="page-sub">CTA para o Instagram.</p>
         <div class="card">
           <div class="card-title">📸 Configuração</div>
-          <div class="field">
-            <label>Título da seção</label>
-            <input type="text" id="insta-titulo" placeholder="Veja mais no Instagram">
-          </div>
-          <div class="field">
-            <label>Texto do botão</label>
-            <input type="text" id="insta-btn" placeholder="@ninalab.on">
-          </div>
-          <div class="field">
-            <label>Link do Instagram (URL completa)</label>
-            <input type="text" id="insta-link" placeholder="https://www.instagram.com/ninalab.on/">
-          </div>
-          <div class="actions">
-            <button class="btn-salvar" onclick="salvar('instagram')">Salvar Instagram</button>
-          </div>
+          <div class="field"><label>Título da seção</label><input type="text" id="ig-titulo"></div>
+          <div class="field"><label>Texto do botão</label><input type="text" id="ig-btn"></div>
+          <div class="field"><label>Link do Instagram</label><input type="text" id="ig-link"></div>
+          <div class="actions"><button class="btn-salvar" onclick="salvar('instagram')">Salvar Instagram</button></div>
         </div>
       </div>
 
-      <!-- ── CONTATO ── -->
+      <!-- CONTATO -->
       <div class="pagina" id="pag-contato">
         <h1 class="page-title">Contato</h1>
-        <p class="page-sub">Informações de contato e configuração do formulário.</p>
+        <p class="page-sub">Informações de contato e formulário.</p>
         <div class="card">
           <div class="card-title">📬 Informações</div>
-          <div class="field">
-            <label>Título da seção</label>
-            <input type="text" id="contato-titulo" placeholder="Traga mais estratégia para o seu mandato.">
-          </div>
+          <div class="field"><label>Título</label><input type="text" id="ct-titulo"></div>
           <div class="field-row">
-            <div class="field">
-              <label>Telefone / WhatsApp</label>
-              <input type="text" id="contato-tel" placeholder="(48) 99640-7748">
-            </div>
-            <div class="field">
-              <label>E-mail</label>
-              <input type="text" id="contato-email" placeholder="mv@ninalab.online">
-            </div>
+            <div class="field"><label>Telefone</label><input type="text" id="ct-tel"></div>
+            <div class="field"><label>E-mail</label><input type="text" id="ct-email"></div>
           </div>
-          <div class="field">
-            <label>Link do Instagram (redes sociais)</label>
-            <input type="text" id="contato-insta" placeholder="https://www.instagram.com/ninalab.on/">
-          </div>
+          <div class="field"><label>Link Instagram (redes)</label><input type="text" id="ct-insta"></div>
         </div>
         <div class="card">
           <div class="card-title">📋 Formulário</div>
-          <div class="field">
-            <label>Título do formulário</label>
-            <input type="text" id="form-titulo" placeholder="Fale com nossos especialistas">
-          </div>
-          <div class="field">
-            <label>Subtítulo do formulário</label>
-            <input type="text" id="form-sub" placeholder="Conte-nos sobre você e sua candidatura:">
-          </div>
-          <div class="field">
-            <label>ID do Formspree</label>
-            <input type="text" id="form-id" placeholder="xwvawnen">
-          </div>
-          <div class="actions">
-            <button class="btn-salvar" onclick="salvar('contato')">Salvar Contato</button>
-          </div>
+          <div class="field"><label>Título do form</label><input type="text" id="ct-ftitulo"></div>
+          <div class="field"><label>Subtítulo do form</label><input type="text" id="ct-fsub"></div>
+          <div class="field"><label>ID do Formspree</label><input type="text" id="ct-fid"></div>
+          <div class="actions"><button class="btn-salvar" onclick="salvar('contato')">Salvar Contato</button></div>
         </div>
       </div>
 
-      <!-- ── CONFIG ── -->
+      <!-- CONFIG -->
       <div class="pagina" id="pag-config">
         <h1 class="page-title">Configurações</h1>
-        <p class="page-sub">Conexão com o Supabase e configurações gerais.</p>
-
+        <p class="page-sub">Supabase e senha do dashboard.</p>
         <div class="card">
           <div class="card-title">🔌 Supabase</div>
-          <div class="supabase-info">
-            <strong>Como configurar:</strong><br>
-            1. Acesse <strong>supabase.com</strong> e abra seu projeto<br>
-            2. Vá em <strong>Settings → API</strong><br>
-            3. Copie a <strong>Project URL</strong> e a <strong>anon public key</strong><br>
-            4. Cole abaixo e clique em Salvar
-          </div>
-          <div class="field">
-            <label>Project URL</label>
-            <input type="text" id="sb-url" placeholder="https://xxxxx.supabase.co" value="https://nyvrwgyijzfgcwmudmui.supabase.co">
-          </div>
-          <div class="field">
-            <label>Anon Public Key</label>
-            <input type="text" id="sb-key" placeholder="eyJhbGciOiJIUzI1NiIs..." value="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55dnJ3Z3lpanpmZ2N3bXVkbXVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4MTc5OTksImV4cCI6MjA5MzM5Mzk5OX0.1Qf1NhTcU9Th16uWYCRcHDRIDrXrQqkPdqW-h6YZbpw">
-          </div>
+          <div class="field"><label>Project URL</label><input type="text" id="sb-url"></div>
+          <div class="field"><label>Anon Key</label><input type="text" id="sb-key"></div>
           <div class="actions">
-            <button class="btn-salvar" onclick="salvarConfig()">Salvar Configuração</button>
-            <button class="btn-secundario" onclick="testarConexao()">Testar conexão</button>
+            <button class="btn-salvar" onclick="salvarConfig()">Salvar</button>
+            <button class="btn-sec" onclick="testarConexao()">Testar conexão</button>
           </div>
         </div>
-
         <div class="card">
-          <div class="card-title">🔐 Segurança</div>
-          <div class="field">
-            <label>Nova senha do dashboard</label>
-            <input type="password" id="nova-senha" placeholder="Digite a nova senha">
-          </div>
-          <div class="field">
-            <label>Confirmar nova senha</label>
-            <input type="password" id="conf-senha" placeholder="Repita a nova senha">
-          </div>
-          <div class="actions">
-            <button class="btn-salvar" onclick="trocarSenha()">Trocar senha</button>
-          </div>
+          <div class="card-title">🔐 Senha</div>
+          <div class="field"><label>Nova senha</label><input type="password" id="nova-senha"></div>
+          <div class="field"><label>Confirmar</label><input type="password" id="conf-senha"></div>
+          <div class="actions"><button class="btn-salvar" onclick="trocarSenha()">Trocar senha</button></div>
         </div>
       </div>
 
@@ -813,515 +273,336 @@ main {
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ══════════════════════════════════════════
-// CONFIGURAÇÃO
-// ══════════════════════════════════════════
-var SENHA_PADRAO = 'ninalab2025';
-var SUPABASE_URL = 'https://nyvrwgyijzfgcwmudmui.supabase.co';
-var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55dnJ3Z3lpanpmZ2N3bXVkbXVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4MTc5OTksImV4cCI6MjA5MzM5Mzk5OX0.1Qf1NhTcU9Th16uWYCRcHDRIDrXrQqkPdqW-h6YZbpw';
-try {
-  SUPABASE_URL = localStorage.getItem('sb_url') || SUPABASE_URL;
-  SUPABASE_KEY = localStorage.getItem('sb_key') || SUPABASE_KEY;
-} catch(e) {}
+var SENHA = 'ninalab2025';
+var SB_URL = 'https://nyvrwgyijzfgcwmudmui.supabase.co';
+var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55dnJ3Z3lpanpmZ2N3bXVkbXVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4MTc5OTksImV4cCI6MjA5MzM5Mzk5OX0.1Qf1NhTcU9Th16uWYCRcHDRIDrXrQqkPdqW-h6YZbpw';
+try { SB_URL = localStorage.getItem('sb_url') || SB_URL; SB_KEY = localStorage.getItem('sb_key') || SB_KEY; } catch(e) {}
 
-// Dados padrão
-var dadosPadrao = {
-  hero: { linha1: 's', linha2: 'eu mandato', linha3: 'em modo', toggle: 'on', btn: 'Solicite uma proposta' },
-  sobre: {
-    stat1_num: '+30', stat1_desc: 'Candidatos atendidos',
-    stat2_num: '100%', stat2_desc: 'Dedicação ao seu mandato',
-    stat3_num: '+12', stat3_desc: 'Anos de experiência',
-    titulo: 'Do roteiro ao resultado. A Nina Lab faz tudo.',
-    p1: 'A Nina Lab oferece tudo que uma comunicação política precisa.',
-    p2: 'Do Reels ao comercial de TV, da identidade visual à pauta semanal.',
-    btn: 'Solicite uma proposta ↗'
-  },
-  servicos: [
-    { num: '01', nome: 'ESTRATÉGIA', desc: 'Mapeamos o cenário político, definimos mensagem e construímos um plano de comunicação para cada fase do seu mandato.' },
-    { num: '02', nome: 'DIREÇÃO DE ARTE', desc: 'Cada post, card e vídeo com uma identidade visual única. Seu eleitor reconhece seu conteúdo antes mesmo de ler o nome.' },
-    { num: '03', nome: 'DESIGN', desc: 'Peças gráficas que comunicam posição política com clareza. Do card de votação ao material de campanha.' },
-    { num: '04', nome: 'BRANDING', desc: 'Construímos a marca pessoal do político — nome, imagem e posicionamento que geram confiança no eleitorado.' },
-    { num: '05', nome: 'CONTEÚDO DIGITAL', desc: 'Roteiros, pautas e calendário editorial pensados para manter o mandato relevante e ativo nas redes todos os dias.' }
-  ],
-  instagram: { titulo: 'Veja mais no Instagram', btn: '@ninalab.on', link: 'https://www.instagram.com/ninalab.on/' },
-  contato: {
-    titulo: 'Traga mais estratégia para o seu mandato.',
-    tel: '(48) 99640-7748', email: 'mv@ninalab.online',
-    insta: 'https://www.instagram.com/ninalab.on/',
-    form_titulo: 'Fale com nossos especialistas',
-    form_sub: 'Conte-nos sobre você e sua candidatura:',
-    form_id: 'xwvawnen'
-  }
+var DP = {
+  hero: {linha2:'seu mandato',linha3:'em modo',btn:'Solicite uma proposta'},
+  sobre: {stat1_num:'+30',stat1_desc:'Candidatos atendidos',stat2_num:'100%',stat2_desc:'Dedicação ao seu mandato',stat3_num:'+12',stat3_desc:'Anos de experiência',titulo:'Do roteiro ao resultado. A Nina Lab faz tudo.',p1:'A Nina Lab oferece tudo que uma comunicação política precisa.',p2:'Do Reels ao comercial de TV, você foca no mandato.',btn:'Solicite uma proposta ↗'},
+  servicos:[{num:'01',nome:'ESTRATÉGIA',desc:'Mapeamos o cenário político.'},{num:'02',nome:'DIREÇÃO DE ARTE',desc:'Identidade visual única.'},{num:'03',nome:'DESIGN',desc:'Peças gráficas com clareza.'},{num:'04',nome:'BRANDING',desc:'Marca pessoal do político.'},{num:'05',nome:'CONTEÚDO DIGITAL',desc:'Calendário editorial para as redes.'}],
+  instagram:{titulo:'Veja mais no Instagram',btn:'@ninalab.on',link:'https://www.instagram.com/ninalab.on/'},
+  contato:{titulo:'Traga mais estratégia para o seu mandato.',tel:'(48) 99640-7748',email:'mv@ninalab.online',insta:'https://www.instagram.com/ninalab.on/',form_titulo:'Fale com nossos especialistas',form_sub:'Conte-nos sobre você e sua candidatura:',form_id:'xwvawnen'}
 };
 
-function ls_get(key, def) {
-  try { var v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch(e) { return def; }
-}
-function ls_set(key, val) {
-  try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
-}
+function ls(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
+function lss(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 
 var dados = {
-  videos:    ls_get('nl_videos', []),
-  hero:      ls_get('nl_hero', dadosPadrao.hero),
-  sobre:     ls_get('nl_sobre', dadosPadrao.sobre),
-  servicos:  ls_get('nl_servicos', dadosPadrao.servicos),
-  instagram: ls_get('nl_instagram', dadosPadrao.instagram),
-  contato:   ls_get('nl_contato', dadosPadrao.contato)
+  videos:    ls('nl_videos',[]),
+  hero:      ls('nl_hero', DP.hero),
+  sobre:     ls('nl_sobre', DP.sobre),
+  servicos:  ls('nl_servicos', DP.servicos),
+  instagram: ls('nl_instagram', DP.instagram),
+  contato:   ls('nl_contato', DP.contato)
 };
 
-// ══════════════════════════════════════════
-// LOGIN
-// ══════════════════════════════════════════
-function fazerLogin() {
-  var senha = document.getElementById('senha-input').value;
-  var senhaCorreta = SENHA_PADRAO;
-  try { senhaCorreta = localStorage.getItem('nl_senha') || SENHA_PADRAO; } catch(e) {}
-  if (senha === senhaCorreta) {
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
+// ── LOGIN ──
+function fazerLogin(){
+  var s=document.getElementById('senha-input').value;
+  var sc=SENHA; try{sc=localStorage.getItem('nl_senha')||SENHA;}catch(e){}
+  if(s===sc){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='block';
     carregarTudo();
   } else {
-    document.getElementById('login-erro').style.display = 'block';
-    document.getElementById('senha-input').value = '';
+    document.getElementById('login-erro').style.display='block';
+    document.getElementById('senha-input').value='';
     document.getElementById('senha-input').focus();
   }
 }
+document.getElementById('senha-input').addEventListener('keydown',function(e){if(e.key==='Enter')fazerLogin();});
+function sair(){document.getElementById('app').style.display='none';document.getElementById('login-screen').style.display='flex';document.getElementById('senha-input').value='';}
 
-document.getElementById('senha-input').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') fazerLogin();
-});
-
-function sair() {
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('senha-input').value = '';
-}
-
-// ══════════════════════════════════════════
-// NAVEGAÇÃO
-// ══════════════════════════════════════════
-function irPara(pag, btn) {
-  document.querySelectorAll('.pagina').forEach(function(p) { p.classList.remove('ativa'); });
-  document.querySelectorAll('.nav-item').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('pag-' + pag).classList.add('ativa');
+// ── NAV ──
+function irPara(pag,btn){
+  document.querySelectorAll('.pagina').forEach(function(p){p.classList.remove('ativa');});
+  document.querySelectorAll('.nav-item').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('pag-'+pag).classList.add('ativa');
   btn.classList.add('active');
 }
 
-// ══════════════════════════════════════════
-// CARREGAR TUDO
-// ══════════════════════════════════════════
-function carregarTudo() {
-  carregarDoSupabase()
-    .then(function() { preencherCampos(); })
-    .catch(function() { preencherCampos(); });
+// ── PREENCHER CAMPOS ──
+function carregarTudo(){
+  carregarDoSupabase().then(preencher).catch(preencher);
 }
 
-function preencherCampos() {
-  // Hero
-  var h = dados.hero;
-  document.getElementById('hero-linha2').value = h.linha2 || '';
-  document.getElementById('hero-linha3').value = h.linha3 || '';
-  document.getElementById('hero-btn').value = h.btn || '';
+function preencher(){
+  var h=dados.hero;
+  set('hero-l1',h.linha2||''); set('hero-l2',h.linha3||''); set('hero-btn',h.btn||'');
 
-  // Sobre
-  var s = dados.sobre;
-  document.getElementById('sobre-stat1-num').value = s.stat1_num || '';
-  document.getElementById('sobre-stat1-desc').value = s.stat1_desc || '';
-  document.getElementById('sobre-stat2-num').value = s.stat2_num || '';
-  document.getElementById('sobre-stat2-desc').value = s.stat2_desc || '';
-  document.getElementById('sobre-stat3-num').value = s.stat3_num || '';
-  document.getElementById('sobre-stat3-desc').value = s.stat3_desc || '';
-  document.getElementById('sobre-titulo').value = s.titulo || '';
-  document.getElementById('sobre-p1').value = s.p1 || '';
-  document.getElementById('sobre-p2').value = s.p2 || '';
-  document.getElementById('sobre-btn').value = s.btn || '';
+  var s=dados.sobre;
+  set('s1n',s.stat1_num); set('s1d',s.stat1_desc);
+  set('s2n',s.stat2_num); set('s2d',s.stat2_desc);
+  set('s3n',s.stat3_num); set('s3d',s.stat3_desc);
+  set('s-titulo',s.titulo); set('s-p1',s.p1); set('s-p2',s.p2); set('s-btn',s.btn);
 
-  // Serviços
-  renderizarServicos();
+  var ig=dados.instagram;
+  set('ig-titulo',ig.titulo); set('ig-btn',ig.btn); set('ig-link',ig.link);
 
-  // Instagram
-  var ig = dados.instagram;
-  document.getElementById('insta-titulo').value = ig.titulo || '';
-  document.getElementById('insta-btn').value = ig.btn || '';
-  document.getElementById('insta-link').value = ig.link || '';
+  var c=dados.contato;
+  set('ct-titulo',c.titulo); set('ct-tel',c.tel); set('ct-email',c.email); set('ct-insta',c.insta);
+  set('ct-ftitulo',c.form_titulo); set('ct-fsub',c.form_sub); set('ct-fid',c.form_id);
 
-  // Contato
-  var c = dados.contato;
-  document.getElementById('contato-titulo').value = c.titulo || '';
-  document.getElementById('contato-tel').value = c.tel || '';
-  document.getElementById('contato-email').value = c.email || '';
-  document.getElementById('contato-insta').value = c.insta || '';
-  document.getElementById('form-titulo').value = c.form_titulo || '';
-  document.getElementById('form-sub').value = c.form_sub || '';
-  document.getElementById('form-id').value = c.form_id || '';
+  set('sb-url',SB_URL); set('sb-key',SB_KEY);
 
-  // Config
-  try {
-    document.getElementById('sb-url').value = SUPABASE_URL;
-    document.getElementById('sb-key').value = SUPABASE_KEY;
-  } catch(e) {}
-
-  // Vídeos
-  renderizarVideos();
+  renderServicos();
+  renderVideos();
 }
 
-// ══════════════════════════════════════════
-// VÍDEOS
-// ══════════════════════════════════════════
-function renderizarVideos() {
-  var lista = document.getElementById('video-lista');
-  if (!dados.videos || !dados.videos.length) {
-    lista.innerHTML = '<div class="empty-state"><div class="icon">🎬</div><p>Nenhum vídeo adicionado ainda.<br>Clique em "Adicionar vídeo" abaixo.</p></div>';
+function set(id,val){
+  var el=document.getElementById(id);
+  if(!el||val===undefined||val===null)return;
+  if(el.tagName==='TEXTAREA')el.value=val;
+  else el.value=val;
+}
+
+// ── VÍDEOS ──
+function renderVideos(){
+  var lista=document.getElementById('video-lista');
+  if(!dados.videos||!dados.videos.length){
+    lista.innerHTML='<div class="empty-state"><div class="icon">🎬</div><p>Nenhum vídeo adicionado ainda.<br>Clique em "+ Adicionar vídeo" abaixo.</p></div>';
     return;
   }
-  lista.innerHTML = dados.videos.map(function(v, i) {
-    var thumb = v.thumb || (v.plataforma === 'vimeo'
-      ? 'https://vumbnail.com/' + v.id + '.jpg'
-      : 'https://img.youtube.com/vi/' + v.id + '/hqdefault.jpg');
-    return '<div class="video-item" id="video-item-' + i + '">' +
-      '<img class="video-thumb" id="thumb-preview-' + i + '" src="' + thumb + '" onerror="this.style.opacity=0.3">' +
-      '<div class="video-info"><h4>' + (v.nome || 'Sem nome') + '</h4><p>' + (v.cargo || '') + ' · ' + (v.plataforma || 'vimeo').toUpperCase() + ' · ' + v.id + '</p></div>' +
-      '<span class="video-badge">' + (v.plataforma || 'vimeo') + '</span>' +
-      '<div class="video-acoes">' +
-        '<button class="btn-secundario" style="font-size:12px;padding:7px 14px" onclick="abrirEdicao(' + i + ')">✏️ Editar</button>' +
-        '<button class="btn-perigo" onclick="removerVideo(' + i + ')">Remover</button>' +
-      '</div>' +
-      '</div>' +
-      '<div class="form-edicao" id="form-edicao-' + i + '" style="display:none;background:var(--cinza2);border:1px solid var(--brd);border-radius:12px;padding:20px;margin-bottom:12px">' +
-        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">' +
-          '<div class="field"><label>Nome do candidato</label><input type="text" id="edit-nome-' + i + '" value="' + (v.nome||'') + '"></div>' +
-          '<div class="field"><label>Cargo</label><input type="text" id="edit-cargo-' + i + '" value="' + (v.cargo||'') + '"></div>' +
-        '</div>' +
-        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">' +
-          '<div class="field"><label>Plataforma</label>' +
-            '<select id="edit-plat-' + i + '">' +
-              '<option value="vimeo"' + (v.plataforma==='vimeo'?' selected':'') + '>Vimeo</option>' +
-              '<option value="youtube"' + (v.plataforma==='youtube'?' selected':'') + '>YouTube</option>' +
-            '</select>' +
-          '</div>' +
-          '<div class="field"><label>ID do vídeo</label><input type="text" id="edit-id-' + i + '" value="' + (v.id||'') + '"></div>' +
-        '</div>' +
-        '<div class="field" style="margin-bottom:16px">' +
-          '<label>Thumbnail</label>' +
-          '<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">' +
-            '<input type="text" id="edit-thumb-url-' + i + '" value="' + (v.thumb||'') + '" placeholder="URL da imagem (opcional)" style="flex:1;min-width:200px">' +
-            '<span style="color:var(--text-dim);font-size:12px">ou</span>' +
-            '<label style="cursor:pointer;background:var(--cinza3);border:1px solid var(--brd);border-radius:8px;padding:8px 14px;font-size:12px;color:var(--branco);white-space:nowrap;text-transform:none;letter-spacing:0">' +
-              '📁 Subir arquivo' +
-              '<input type="file" id="edit-thumb-file-' + i + '" accept="image/*" style="display:none" onchange="previewThumb(' + i + ')">' +
-            '</label>' +
-          '</div>' +
-          '<div style="margin-top:10px;display:flex;gap:12px;align-items:center">' +
-            '<img id="edit-thumb-img-' + i + '" src="' + thumb + '" style="width:80px;height:60px;object-fit:cover;border-radius:8px;border:1px solid var(--brd)">' +
-            '<span style="font-size:11px;color:var(--text-dim)">Preview da thumbnail</span>' +
-          '</div>' +
-        '</div>' +
-        '<div style="display:flex;gap:10px">' +
-          '<button class="btn-salvar" onclick="salvarEdicao(' + i + ')">✓ Salvar alterações</button>' +
-          '<button class="btn-secundario" onclick="fecharEdicao(' + i + ')">Cancelar</button>' +
-        '</div>' +
-      '</div>';
-  }).join('');
-}
-
-function abrirEdicao(i) {
-  document.getElementById('form-edicao-' + i).style.display = 'block';
-  document.getElementById('video-item-' + i).style.borderBottom = '1px solid var(--brd)';
-  document.getElementById('video-item-' + i).style.borderRadius = '12px 12px 0 0';
-}
-
-function fecharEdicao(i) {
-  document.getElementById('form-edicao-' + i).style.display = 'none';
-  document.getElementById('video-item-' + i).style.borderBottom = '';
-  document.getElementById('video-item-' + i).style.borderRadius = '';
-}
-
-function previewThumb(i) {
-  var file = document.getElementById('edit-thumb-file-' + i).files[0];
-  if (!file) return;
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    var url = e.target.result;
-    document.getElementById('edit-thumb-img-' + i).src = url;
-    document.getElementById('edit-thumb-url-' + i).value = '';
-    // Store base64 temporarily
-    dados.videos[i]._thumbBase64 = url;
-  };
-  reader.readAsDataURL(file);
-}
-
-function salvarEdicao(i) {
-  var plat = document.getElementById('edit-plat-' + i).value;
-  var id   = document.getElementById('edit-id-' + i).value.trim();
-  var nome = document.getElementById('edit-nome-' + i).value.trim();
-  var cargo= document.getElementById('edit-cargo-' + i).value.trim();
-  var thumbUrl = document.getElementById('edit-thumb-url-' + i).value.trim();
-  var thumbBase64 = dados.videos[i]._thumbBase64 || '';
-
-  if (!id) { toast('Informe o ID do vídeo', true); return; }
-
-  dados.videos[i] = {
-    id: id,
-    plataforma: plat,
-    nome: nome,
-    cargo: cargo,
-    thumb: thumbBase64 || thumbUrl || dados.videos[i].thumb || ''
-  };
-
-  ls_set('nl_videos', dados.videos);
-  salvarVideosSupabase();
-  renderizarVideos();
-  toast('Vídeo atualizado! ✓');
-}
-
-function abrirFormVideo() {
-  document.getElementById('form-add-video').classList.add('aberto');
-  document.getElementById('btn-add-video').style.display = 'none';
-}
-
-function fecharFormVideo() {
-  document.getElementById('form-add-video').classList.remove('aberto');
-  document.getElementById('btn-add-video').style.display = 'flex';
-  ['add-id', 'add-nome', 'add-cargo', 'add-thumb'].forEach(function(id) {
-    document.getElementById(id).value = '';
+  var html='';
+  dados.videos.forEach(function(v,i){
+    var th=(v.thumb&&v.thumb.length>10)?v.thumb:(v.plataforma==='vimeo'?'https://vumbnail.com/'+v.id+'.jpg':'https://img.youtube.com/vi/'+v.id+'/hqdefault.jpg');
+    var tval=v.thumb&&!v.thumb.startsWith('data:')?v.thumb:'';
+    html+='<div class="video-item" id="vi-'+i+'">'
+      +'<img class="video-thumb" src="'+th+'" onerror="this.style.opacity=0.2">'
+      +'<div class="video-info"><h4>'+(v.nome||'Sem nome')+'</h4><p>'+(v.cargo||'')+' · '+(v.plataforma||'vimeo').toUpperCase()+' · '+v.id+'</p></div>'
+      +'<span class="video-badge">'+(v.plataforma||'vimeo')+'</span>'
+      +'<div class="video-acoes">'
+        +'<button class="btn-sec" style="font-size:12px;padding:7px 14px" onclick="abrirEd('+i+')">✏️ Editar</button>'
+        +'<button class="btn-del" onclick="delVideo('+i+')">Remover</button>'
+      +'</div></div>'
+      +'<div class="form-edicao" id="fed-'+i+'">'
+        +'<div class="field-row" style="margin-bottom:14px">'
+          +'<div class="field"><label>Nome</label><input type="text" id="en-'+i+'" value="'+(v.nome||'').replace(/"/g,"'")+'" ></div>'
+          +'<div class="field"><label>Cargo</label><input type="text" id="ec-'+i+'" value="'+(v.cargo||'').replace(/"/g,"'")+'" ></div>'
+        +'</div>'
+        +'<div class="field-row" style="margin-bottom:14px">'
+          +'<div class="field"><label>Plataforma</label><select id="ep-'+i+'">'
+            +'<option value="vimeo"'+(v.plataforma==='vimeo'?' selected':'')+'>Vimeo</option>'
+            +'<option value="youtube"'+(v.plataforma==='youtube'?' selected':'')+'>YouTube</option>'
+          +'</select></div>'
+          +'<div class="field"><label>ID do vídeo</label><input type="text" id="ei-'+i+'" value="'+(v.id||'')+'"></div>'
+        +'</div>'
+        +'<div class="field" style="margin-bottom:14px"><label>Thumbnail</label>'
+          +'<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px">'
+            +'<input type="text" id="et-'+i+'" value="'+tval+'" placeholder="URL da imagem" style="flex:1;min-width:160px">'
+            +'<label class="btn-upload">📁 Subir arquivo<input type="file" id="ef-'+i+'" accept="image/*" style="display:none" onchange="prevThumb('+i+')"></label>'
+          +'</div>'
+          +'<img id="ep-img-'+i+'" src="'+th+'" class="thumb-prev">'
+        +'</div>'
+        +'<div style="display:flex;gap:10px">'
+          +'<button class="btn-salvar" onclick="saveEd('+i+')">✓ Salvar</button>'
+          +'<button class="btn-sec" onclick="fecharEd('+i+')">Cancelar</button>'
+        +'</div>'
+      +'</div>';
   });
-  _addThumbBase64 = '';
-  document.getElementById('add-thumb-preview').style.display = 'none';
-  document.getElementById('add-thumb-preview-label').style.display = 'none';
-  document.getElementById('add-thumb-file').value = '';
+  lista.innerHTML=html;
 }
 
-function atualizarPlataforma() {
-  var plat = document.getElementById('add-plataforma').value;
-  document.getElementById('add-id-label').textContent = plat === 'vimeo' ? 'ID do Vimeo' : 'ID do YouTube';
-  document.getElementById('add-id').placeholder = plat === 'vimeo' ? 'Ex: 1188104112' : 'Ex: dQw4w9WgXcQ';
+function abrirEd(i){
+  document.querySelectorAll('.form-edicao').forEach(function(el){el.classList.remove('aberto');});
+  document.getElementById('fed-'+i).classList.add('aberto');
 }
+function fecharEd(i){document.getElementById('fed-'+i).classList.remove('aberto');}
 
-var _addThumbBase64 = '';
-
-function previewAddThumb() {
-  var file = document.getElementById('add-thumb-file').files[0];
-  if (!file) return;
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    _addThumbBase64 = e.target.result;
-    document.getElementById('add-thumb-preview').src = e.target.result;
-    document.getElementById('add-thumb-preview').style.display = 'block';
-    document.getElementById('add-thumb-preview-label').style.display = 'block';
-    document.getElementById('add-thumb').value = '';
+function prevThumb(i){
+  var f=document.getElementById('ef-'+i).files[0];
+  if(!f)return;
+  var r=new FileReader();
+  r.onload=function(e){
+    document.getElementById('ep-img-'+i).src=e.target.result;
+    dados.videos[i]._b64=e.target.result;
+    document.getElementById('et-'+i).value='';
   };
-  reader.readAsDataURL(file);
+  r.readAsDataURL(f);
 }
 
-function salvarVideo() {
-  var id = document.getElementById('add-id').value.trim();
-  var nome = document.getElementById('add-nome').value.trim();
-  var cargo = document.getElementById('add-cargo').value.trim();
-  var thumbUrl = document.getElementById('add-thumb').value.trim();
-  var plat = document.getElementById('add-plataforma').value;
-  if (!id) { toast('Informe o ID do vídeo', true); return; }
-  var thumb = _addThumbBase64 || thumbUrl;
-  dados.videos.push({ id: id, nome: nome, cargo: cargo, thumb: thumb, plataforma: plat });
-  ls_set('nl_videos', dados.videos);
-  salvarVideosSupabase();
-  renderizarVideos();
-  fecharFormVideo();
-  toast('Vídeo adicionado! ✓');
+function saveEd(i){
+  var id=document.getElementById('ei-'+i).value.trim();
+  var nome=document.getElementById('en-'+i).value.trim();
+  var cargo=document.getElementById('ec-'+i).value.trim();
+  var plat=document.getElementById('ep-'+i).value;
+  var turl=document.getElementById('et-'+i).value.trim();
+  var b64=dados.videos[i]._b64||'';
+  if(!id){toast('Informe o ID',true);return;}
+  dados.videos[i]={id:id,nome:nome,cargo:cargo,plataforma:plat,thumb:b64||turl||dados.videos[i].thumb||''};
+  lss('nl_videos',dados.videos);
+  syncVideos();
+  renderVideos();
+  toast('Vídeo atualizado ✓');
 }
 
-function removerVideo(i) {
-  if (!confirm('Remover este vídeo?')) return;
-  dados.videos.splice(i, 1);
-  ls_set('nl_videos', dados.videos);
-  salvarVideosSupabase();
-  renderizarVideos();
+function delVideo(i){
+  if(!confirm('Remover este vídeo?'))return;
+  dados.videos.splice(i,1);
+  lss('nl_videos',dados.videos);
+  syncVideos();
+  renderVideos();
   toast('Vídeo removido.');
 }
 
-// ══════════════════════════════════════════
-// SERVIÇOS
-// ══════════════════════════════════════════
-function renderizarServicos() {
-  var lista = document.getElementById('servicos-lista');
-  lista.innerHTML = dados.servicos.map(function(s, i) {
-    return '<div class="card"><div class="card-title">' + s.num + ' · ' + s.nome + '</div>' +
-      '<div class="field"><label>Nome do serviço</label>' +
-      '<input type="text" id="srv-nome-' + i + '" value="' + (s.nome||'') + '"></div>' +
-      '<div class="field"><label>Descrição</label>' +
-      '<textarea id="srv-desc-' + i + '" rows="3">' + (s.desc||'') + '</textarea></div></div>';
+// Add video
+var _addB64='';
+function abrirAdd(){document.getElementById('form-add').classList.add('aberto');document.getElementById('btn-add').style.display='none';}
+function fecharAdd(){
+  document.getElementById('form-add').classList.remove('aberto');
+  document.getElementById('btn-add').style.display='flex';
+  ['add-id','add-nome','add-cargo','add-thumb-url'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('add-thumb-prev').style.display='none';
+  document.getElementById('add-thumb-file').value='';
+  _addB64='';
+}
+function updAddLabel(){
+  var p=document.getElementById('add-plat').value;
+  document.getElementById('add-id-lbl').textContent=p==='vimeo'?'ID do Vimeo':'ID do YouTube';
+  document.getElementById('add-id').placeholder=p==='vimeo'?'Ex: 1188104112':'Ex: dQw4w9WgXcQ';
+}
+function prevAddThumb(){
+  var f=document.getElementById('add-thumb-file').files[0];
+  if(!f)return;
+  var r=new FileReader();
+  r.onload=function(e){
+    _addB64=e.target.result;
+    var img=document.getElementById('add-thumb-prev');
+    img.src=e.target.result; img.style.display='block';
+    document.getElementById('add-thumb-url').value='';
+  };
+  r.readAsDataURL(f);
+}
+function addVideo(){
+  var id=document.getElementById('add-id').value.trim();
+  var nome=document.getElementById('add-nome').value.trim();
+  var cargo=document.getElementById('add-cargo').value.trim();
+  var turl=document.getElementById('add-thumb-url').value.trim();
+  var plat=document.getElementById('add-plat').value;
+  if(!id){toast('Informe o ID do vídeo',true);return;}
+  dados.videos.push({id:id,nome:nome,cargo:cargo,thumb:_addB64||turl,plataforma:plat});
+  lss('nl_videos',dados.videos);
+  syncVideos();
+  renderVideos();
+  fecharAdd();
+  toast('Vídeo adicionado ✓');
+}
+
+// ── SERVIÇOS ──
+function renderServicos(){
+  var el=document.getElementById('srv-lista');
+  el.innerHTML=dados.servicos.map(function(s,i){
+    return '<div class="card"><div class="card-title">'+s.num+' · '+s.nome+'</div>'
+      +'<div class="field"><label>Nome</label><input type="text" id="sn-'+i+'" value="'+(s.nome||'')+'"></div>'
+      +'<div class="field"><label>Descrição</label><textarea id="sd-'+i+'" rows="3">'+(s.desc||'')+'</textarea></div></div>';
   }).join('');
 }
 
-// ══════════════════════════════════════════
-// SALVAR
-// ══════════════════════════════════════════
-function salvar(secao) {
-  if (secao === 'hero') {
-    dados.hero = {
-      linha1: 's',
-      linha2: document.getElementById('hero-linha2').value,
-      linha3: document.getElementById('hero-linha3').value,
-      toggle: 'on',
-      btn: document.getElementById('hero-btn').value
-    };
-  } else if (secao === 'sobre') {
-    dados.sobre = {
-      stat1_num:  document.getElementById('sobre-stat1-num').value,
-      stat1_desc: document.getElementById('sobre-stat1-desc').value,
-      stat2_num:  document.getElementById('sobre-stat2-num').value,
-      stat2_desc: document.getElementById('sobre-stat2-desc').value,
-      stat3_num:  document.getElementById('sobre-stat3-num').value,
-      stat3_desc: document.getElementById('sobre-stat3-desc').value,
-      titulo: document.getElementById('sobre-titulo').value,
-      p1: document.getElementById('sobre-p1').value,
-      p2: document.getElementById('sobre-p2').value,
-      btn: document.getElementById('sobre-btn').value
-    };
-  } else if (secao === 'servicos') {
-    dados.servicos.forEach(function(s, i) {
-      s.nome = document.getElementById('srv-nome-' + i).value;
-      s.desc = document.getElementById('srv-desc-' + i).value;
-    });
-  } else if (secao === 'instagram') {
-    dados.instagram = {
-      titulo: document.getElementById('insta-titulo').value,
-      btn: document.getElementById('insta-btn').value,
-      link: document.getElementById('insta-link').value
-    };
-  } else if (secao === 'contato') {
-    dados.contato = {
-      titulo: document.getElementById('contato-titulo').value,
-      tel: document.getElementById('contato-tel').value,
-      email: document.getElementById('contato-email').value,
-      insta: document.getElementById('contato-insta').value,
-      form_titulo: document.getElementById('form-titulo').value,
-      form_sub: document.getElementById('form-sub').value,
-      form_id: document.getElementById('form-id').value
-    };
+// ── SALVAR SEÇÕES ──
+function salvar(sec){
+  if(sec==='hero'){
+    dados.hero={linha1:'s',linha2:document.getElementById('hero-l1').value,linha3:document.getElementById('hero-l2').value,toggle:'on',btn:document.getElementById('hero-btn').value};
+  }else if(sec==='sobre'){
+    dados.sobre={stat1_num:document.getElementById('s1n').value,stat1_desc:document.getElementById('s1d').value,stat2_num:document.getElementById('s2n').value,stat2_desc:document.getElementById('s2d').value,stat3_num:document.getElementById('s3n').value,stat3_desc:document.getElementById('s3d').value,titulo:document.getElementById('s-titulo').value,p1:document.getElementById('s-p1').value,p2:document.getElementById('s-p2').value,btn:document.getElementById('s-btn').value};
+  }else if(sec==='servicos'){
+    dados.servicos.forEach(function(s,i){s.nome=document.getElementById('sn-'+i).value;s.desc=document.getElementById('sd-'+i).value;});
+  }else if(sec==='instagram'){
+    dados.instagram={titulo:document.getElementById('ig-titulo').value,btn:document.getElementById('ig-btn').value,link:document.getElementById('ig-link').value};
+  }else if(sec==='contato'){
+    dados.contato={titulo:document.getElementById('ct-titulo').value,tel:document.getElementById('ct-tel').value,email:document.getElementById('ct-email').value,insta:document.getElementById('ct-insta').value,form_titulo:document.getElementById('ct-ftitulo').value,form_sub:document.getElementById('ct-fsub').value,form_id:document.getElementById('ct-fid').value};
   }
-  ls_set('nl_' + secao, dados[secao]);
-  salvarSupabase(secao);
-  toast('Salvo com sucesso! ✓');
+  lss('nl_'+sec,dados[sec]);
+  syncConteudo(sec);
+  toast('Salvo ✓');
 }
 
-function salvarConfig() {
-  SUPABASE_URL = document.getElementById('sb-url').value.trim();
-  SUPABASE_KEY = document.getElementById('sb-key').value.trim();
-  try {
-    localStorage.setItem('sb_url', SUPABASE_URL);
-    localStorage.setItem('sb_key', SUPABASE_KEY);
-  } catch(e) {}
-  toast('Configuração salva! ✓');
+function salvarConfig(){
+  SB_URL=document.getElementById('sb-url').value.trim();
+  SB_KEY=document.getElementById('sb-key').value.trim();
+  try{localStorage.setItem('sb_url',SB_URL);localStorage.setItem('sb_key',SB_KEY);}catch(e){}
+  toast('Config salva ✓');
 }
 
-async function testarConexao() {
-  if (!SUPABASE_URL || !SUPABASE_KEY) { toast('Preencha URL e Key primeiro.', true); return; }
-  try {
-    var r = await fetch(SUPABASE_URL + '/rest/v1/conteudo?select=secao&limit=1', {
-      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-    });
-    if (r.ok) toast('Conexão OK! ✓');
-    else toast('Erro: ' + r.status, true);
-  } catch(e) { toast('Não foi possível conectar.', true); }
+async function testarConexao(){
+  try{
+    var r=await fetch(SB_URL+'/rest/v1/conteudo?select=secao&limit=1',{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}});
+    toast(r.ok?'Conexão OK ✓':'Erro: '+r.status,!r.ok);
+  }catch(e){toast('Sem conexão',true);}
 }
 
-function trocarSenha() {
-  var nova = document.getElementById('nova-senha').value;
-  var conf = document.getElementById('conf-senha').value;
-  if (!nova) { toast('Digite a nova senha.', true); return; }
-  if (nova !== conf) { toast('As senhas não coincidem.', true); return; }
-  try { localStorage.setItem('nl_senha', nova); } catch(e) {}
-  document.getElementById('nova-senha').value = '';
-  document.getElementById('conf-senha').value = '';
-  toast('Senha alterada! ✓');
+function trocarSenha(){
+  var n=document.getElementById('nova-senha').value;
+  var c=document.getElementById('conf-senha').value;
+  if(!n){toast('Digite a nova senha',true);return;}
+  if(n!==c){toast('Senhas não coincidem',true);return;}
+  try{localStorage.setItem('nl_senha',n);}catch(e){}
+  document.getElementById('nova-senha').value='';
+  document.getElementById('conf-senha').value='';
+  toast('Senha alterada ✓');
 }
 
-// ══════════════════════════════════════════
-// SUPABASE
-// ══════════════════════════════════════════
-async function carregarDoSupabase() {
-  if (!SUPABASE_URL || !SUPABASE_KEY) return;
-  var headers = { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY };
-  // Conteúdo
-  var resC = await fetch(SUPABASE_URL + '/rest/v1/conteudo?select=secao,dados', { headers: headers });
-  if (resC.ok) {
-    var rows = await resC.json();
-    rows.forEach(function(row) {
-      if (dados[row.secao] !== undefined) {
-        dados[row.secao] = typeof row.dados === 'string' ? JSON.parse(row.dados) : row.dados;
-        ls_set('nl_' + row.secao, dados[row.secao]);
+// ── SUPABASE ──
+async function carregarDoSupabase(){
+  var h={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};
+  var r=await fetch(SB_URL+'/rest/v1/conteudo?select=secao,dados',{headers:h});
+  if(r.ok){
+    var rows=await r.json();
+    rows.forEach(function(row){
+      if(dados[row.secao]!==undefined){
+        dados[row.secao]=typeof row.dados==='string'?JSON.parse(row.dados):row.dados;
+        lss('nl_'+row.secao,dados[row.secao]);
       }
     });
   }
-  // Vídeos
-  var resV = await fetch(SUPABASE_URL + '/rest/v1/videos?select=*&order=ordem.asc&ativo=eq.true', { headers: headers });
-  if (resV.ok) {
-    var vids = await resV.json();
-    if (vids.length) {
-      dados.videos = vids.map(function(v) {
-        return {
-          id: v.plataforma === 'vimeo' ? v.vimeo_id : v.youtube_id,
-          plataforma: v.plataforma,
-          nome: v.nome, cargo: v.cargo, thumb: v.thumb
-        };
-      });
-      ls_set('nl_videos', dados.videos);
+  var rv=await fetch(SB_URL+'/rest/v1/videos?select=*&order=ordem.asc&ativo=eq.true',{headers:h});
+  if(rv.ok){
+    var vids=await rv.json();
+    if(vids.length){
+      dados.videos=vids.map(function(v){return{id:v.plataforma==='vimeo'?v.vimeo_id:v.youtube_id,plataforma:v.plataforma,nome:v.nome,cargo:v.cargo,thumb:v.thumb||''};});
+      lss('nl_videos',dados.videos);
     }
   }
 }
 
-async function salvarSupabase(secao) {
-  if (!SUPABASE_URL || !SUPABASE_KEY) return;
-  try {
-    await fetch(SUPABASE_URL + '/rest/v1/conteudo?secao=eq.' + secao, {
-      method: 'PATCH',
-      headers: {
-        'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY,
-        'Content-Type': 'application/json', 'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify({ dados: dados[secao], atualizado_em: new Date().toISOString() })
+async function syncVideos(){
+  if(!SB_URL||!SB_KEY)return;
+  try{
+    var h={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'};
+    // Deleta usando filtro obrigatório para RLS
+    await fetch(SB_URL+'/rest/v1/videos?ordem=gte.0',{method:'DELETE',headers:h});
+    if(!dados.videos.length)return;
+    var rows=dados.videos.map(function(v,i){
+      var th=v.thumb&&!v.thumb.startsWith('data:')?v.thumb:'';
+      return{plataforma:v.plataforma||'vimeo',vimeo_id:v.plataforma==='vimeo'?v.id:null,youtube_id:v.plataforma==='youtube'?v.id:null,nome:v.nome||'',cargo:v.cargo||'',thumb:th,ordem:i,ativo:true};
     });
-  } catch(e) { console.warn('Supabase offline.'); }
+    await fetch(SB_URL+'/rest/v1/videos',{method:'POST',headers:Object.assign({},h,{'Prefer':'return=minimal'}),body:JSON.stringify(rows)});
+  }catch(e){console.warn('Supabase offline.');}
 }
 
-async function salvarVideosSupabase() {
-  if (!SUPABASE_URL || !SUPABASE_KEY) return;
-  try {
-    var headers = { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' };
-    await fetch(SUPABASE_URL + '/rest/v1/videos', { method: 'DELETE', headers: headers });
-    if (!dados.videos.length) return;
-    var rows = dados.videos.map(function(v, i) {
-      return {
-        plataforma: v.plataforma || 'vimeo',
-        vimeo_id:   v.plataforma === 'vimeo' ? v.id : null,
-        youtube_id: v.plataforma === 'youtube' ? v.id : null,
-        nome: v.nome || '', cargo: v.cargo || '', thumb: v.thumb || '',
-        ordem: i, ativo: true
-      };
+async function syncConteudo(sec){
+  if(!SB_URL||!SB_KEY)return;
+  try{
+    await fetch(SB_URL+'/rest/v1/conteudo?secao=eq.'+sec,{
+      method:'PATCH',
+      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+      body:JSON.stringify({dados:dados[sec],atualizado_em:new Date().toISOString()})
     });
-    await fetch(SUPABASE_URL + '/rest/v1/videos', {
-      method: 'POST',
-      headers: Object.assign({}, headers, { 'Prefer': 'return=minimal' }),
-      body: JSON.stringify(rows)
-    });
-  } catch(e) { console.warn('Supabase offline:', e); }
+  }catch(e){console.warn('Supabase offline.');}
 }
 
-// ══════════════════════════════════════════
-// TOAST
-// ══════════════════════════════════════════
-var toastTimer;
-function toast(msg, erro) {
-  var el = document.getElementById('toast');
-  el.textContent = msg;
-  el.className = 'toast show' + (erro ? ' erro' : '');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(function() { el.className = 'toast'; }, 3000);
+// ── TOAST ──
+var _tt;
+function toast(msg,erro){
+  var el=document.getElementById('toast');
+  el.textContent=msg;
+  el.className='toast show'+(erro?' erro':'');
+  clearTimeout(_tt);
+  _tt=setTimeout(function(){el.className='toast';},3000);
 }
 </script>
 </body>
