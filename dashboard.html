@@ -972,13 +972,100 @@ function renderizarVideos() {
     var thumb = v.thumb || (v.plataforma === 'vimeo'
       ? 'https://vumbnail.com/' + v.id + '.jpg'
       : 'https://img.youtube.com/vi/' + v.id + '/hqdefault.jpg');
-    return '<div class="video-item">' +
-      '<img class="video-thumb" src="' + thumb + '" onerror="this.style.opacity=0.3">' +
+    return '<div class="video-item" id="video-item-' + i + '">' +
+      '<img class="video-thumb" id="thumb-preview-' + i + '" src="' + thumb + '" onerror="this.style.opacity=0.3">' +
       '<div class="video-info"><h4>' + (v.nome || 'Sem nome') + '</h4><p>' + (v.cargo || '') + ' · ' + (v.plataforma || 'vimeo').toUpperCase() + ' · ' + v.id + '</p></div>' +
       '<span class="video-badge">' + (v.plataforma || 'vimeo') + '</span>' +
-      '<div class="video-acoes"><button class="btn-perigo" onclick="removerVideo(' + i + ')">Remover</button></div>' +
+      '<div class="video-acoes">' +
+        '<button class="btn-secundario" style="font-size:12px;padding:7px 14px" onclick="abrirEdicao(' + i + ')">✏️ Editar</button>' +
+        '<button class="btn-perigo" onclick="removerVideo(' + i + ')">Remover</button>' +
+      '</div>' +
+      '</div>' +
+      '<div class="form-edicao" id="form-edicao-' + i + '" style="display:none;background:var(--cinza2);border:1px solid var(--brd);border-radius:12px;padding:20px;margin-bottom:12px">' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">' +
+          '<div class="field"><label>Nome do candidato</label><input type="text" id="edit-nome-' + i + '" value="' + (v.nome||'') + '"></div>' +
+          '<div class="field"><label>Cargo</label><input type="text" id="edit-cargo-' + i + '" value="' + (v.cargo||'') + '"></div>' +
+        '</div>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">' +
+          '<div class="field"><label>Plataforma</label>' +
+            '<select id="edit-plat-' + i + '">' +
+              '<option value="vimeo"' + (v.plataforma==='vimeo'?' selected':'') + '>Vimeo</option>' +
+              '<option value="youtube"' + (v.plataforma==='youtube'?' selected':'') + '>YouTube</option>' +
+            '</select>' +
+          '</div>' +
+          '<div class="field"><label>ID do vídeo</label><input type="text" id="edit-id-' + i + '" value="' + (v.id||'') + '"></div>' +
+        '</div>' +
+        '<div class="field" style="margin-bottom:16px">' +
+          '<label>Thumbnail</label>' +
+          '<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">' +
+            '<input type="text" id="edit-thumb-url-' + i + '" value="' + (v.thumb||'') + '" placeholder="URL da imagem (opcional)" style="flex:1;min-width:200px">' +
+            '<span style="color:var(--text-dim);font-size:12px">ou</span>' +
+            '<label style="cursor:pointer;background:var(--cinza3);border:1px solid var(--brd);border-radius:8px;padding:8px 14px;font-size:12px;color:var(--branco);white-space:nowrap;text-transform:none;letter-spacing:0">' +
+              '📁 Subir arquivo' +
+              '<input type="file" id="edit-thumb-file-' + i + '" accept="image/*" style="display:none" onchange="previewThumb(' + i + ')">' +
+            '</label>' +
+          '</div>' +
+          '<div style="margin-top:10px;display:flex;gap:12px;align-items:center">' +
+            '<img id="edit-thumb-img-' + i + '" src="' + thumb + '" style="width:80px;height:60px;object-fit:cover;border-radius:8px;border:1px solid var(--brd)">' +
+            '<span style="font-size:11px;color:var(--text-dim)">Preview da thumbnail</span>' +
+          '</div>' +
+        '</div>' +
+        '<div style="display:flex;gap:10px">' +
+          '<button class="btn-salvar" onclick="salvarEdicao(' + i + ')">✓ Salvar alterações</button>' +
+          '<button class="btn-secundario" onclick="fecharEdicao(' + i + ')">Cancelar</button>' +
+        '</div>' +
       '</div>';
   }).join('');
+}
+
+function abrirEdicao(i) {
+  document.getElementById('form-edicao-' + i).style.display = 'block';
+  document.getElementById('video-item-' + i).style.borderBottom = '1px solid var(--brd)';
+  document.getElementById('video-item-' + i).style.borderRadius = '12px 12px 0 0';
+}
+
+function fecharEdicao(i) {
+  document.getElementById('form-edicao-' + i).style.display = 'none';
+  document.getElementById('video-item-' + i).style.borderBottom = '';
+  document.getElementById('video-item-' + i).style.borderRadius = '';
+}
+
+function previewThumb(i) {
+  var file = document.getElementById('edit-thumb-file-' + i).files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var url = e.target.result;
+    document.getElementById('edit-thumb-img-' + i).src = url;
+    document.getElementById('edit-thumb-url-' + i).value = '';
+    // Store base64 temporarily
+    dados.videos[i]._thumbBase64 = url;
+  };
+  reader.readAsDataURL(file);
+}
+
+function salvarEdicao(i) {
+  var plat = document.getElementById('edit-plat-' + i).value;
+  var id   = document.getElementById('edit-id-' + i).value.trim();
+  var nome = document.getElementById('edit-nome-' + i).value.trim();
+  var cargo= document.getElementById('edit-cargo-' + i).value.trim();
+  var thumbUrl = document.getElementById('edit-thumb-url-' + i).value.trim();
+  var thumbBase64 = dados.videos[i]._thumbBase64 || '';
+
+  if (!id) { toast('Informe o ID do vídeo', true); return; }
+
+  dados.videos[i] = {
+    id: id,
+    plataforma: plat,
+    nome: nome,
+    cargo: cargo,
+    thumb: thumbBase64 || thumbUrl || dados.videos[i].thumb || ''
+  };
+
+  ls_set('nl_videos', dados.videos);
+  salvarVideosSupabase();
+  renderizarVideos();
+  toast('Vídeo atualizado! ✓');
 }
 
 function abrirFormVideo() {
