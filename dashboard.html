@@ -549,6 +549,8 @@ function trocarSenha(){
 // ── SUPABASE ──
 async function carregarDoSupabase(){
   var h={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};
+
+  // Conteúdo
   var r=await fetch(SB_URL+'/rest/v1/conteudo?select=secao,dados',{headers:h});
   if(r.ok){
     var rows=await r.json();
@@ -559,29 +561,58 @@ async function carregarDoSupabase(){
       }
     });
   }
-  var rv=await fetch(SB_URL+'/rest/v1/videos?select=*&order=ordem.asc&ativo=eq.true',{headers:h});
+
+  // Vídeos — sempre sobrescreve o local com o do Supabase
+  var rv=await fetch(SB_URL+'/rest/v1/videos?select=*&order=ordem.asc',{headers:h});
   if(rv.ok){
     var vids=await rv.json();
-    if(vids.length){
-      dados.videos=vids.map(function(v){return{id:v.plataforma==='vimeo'?v.vimeo_id:v.youtube_id,plataforma:v.plataforma,nome:v.nome,cargo:v.cargo,thumb:v.thumb||''};});
-      lss('nl_videos',dados.videos);
-    }
+    // Mapeia independente de ter ativo=true ou não
+    dados.videos=vids.map(function(v){
+      return{
+        id:v.plataforma==='vimeo'?v.vimeo_id:v.youtube_id,
+        plataforma:v.plataforma,
+        nome:v.nome,
+        cargo:v.cargo,
+        thumb:v.thumb||''
+      };
+    });
+    lss('nl_videos',dados.videos);
   }
 }
 
 async function syncVideos(){
-  if(!SB_URL||!SB_KEY)return;
+  if(!SB_URL||!SB_KEY){toast('Sem conexão Supabase',true);return;}
+  var h={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'};
   try{
-    var h={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'};
-    // Deleta usando filtro obrigatório para RLS
-    await fetch(SB_URL+'/rest/v1/videos?ordem=gte.0',{method:'DELETE',headers:h});
-    if(!dados.videos.length)return;
-    var rows=dados.videos.map(function(v,i){
-      var th=v.thumb&&!v.thumb.startsWith('data:')?v.thumb:'';
-      return{plataforma:v.plataforma||'vimeo',vimeo_id:v.plataforma==='vimeo'?v.id:null,youtube_id:v.plataforma==='youtube'?v.id:null,nome:v.nome||'',cargo:v.cargo||'',thumb:th,ordem:i,ativo:true};
-    });
-    await fetch(SB_URL+'/rest/v1/videos',{method:'POST',headers:Object.assign({},h,{'Prefer':'return=minimal'}),body:JSON.stringify(rows)});
-  }catch(e){console.warn('Supabase offline.');}
+    // 1. Busca todos os IDs existentes no Supabase
+    var rGet=await fetch(SB_URL+'/rest/v1/videos?select=id',{headers:h});
+    if(!rGet.ok) throw new Error('Erro ao buscar vídeos: '+rGet.status);
+    var existentes=await rGet.json();
+
+    // 2. Deleta cada um individualmente
+    for(var i=0;i<existentes.length;i++){
+      await fetch(SB_URL+'/rest/v1/videos?id=eq.'+existentes[i].id,{method:'DELETE',headers:h});
+    }
+
+    // 3. Insere os vídeos atuais
+    if(dados.videos.length){
+      var rows=dados.videos.map(function(v,i){
+        var th=v.thumb&&!v.thumb.startsWith('data:')?v.thumb:'';
+        return{plataforma:v.plataforma||'vimeo',vimeo_id:v.plataforma==='vimeo'?v.id:null,youtube_id:v.plataforma==='youtube'?v.id:null,nome:v.nome||'',cargo:v.cargo||'',thumb:th,ordem:i,ativo:true};
+      });
+      var rIns=await fetch(SB_URL+'/rest/v1/videos',{
+        method:'POST',
+        headers:Object.assign({},h,{'Prefer':'return=minimal'}),
+        body:JSON.stringify(rows)
+      });
+      if(!rIns.ok) throw new Error('Erro ao inserir: '+rIns.status);
+    }
+
+    toast('Sincronizado ✓');
+  }catch(e){
+    console.warn('Sync erro:',e);
+    toast('Erro ao sincronizar: '+e.message,true);
+  }
 }
 
 async function syncConteudo(sec){
