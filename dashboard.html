@@ -14,6 +14,7 @@
 }
 body{font-family:'Space Grotesk',sans-serif;background:var(--preto);color:var(--branco);min-height:100vh}
 
+
 /* LOGIN */
 #login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center}
 .login-box{background:var(--cinza);border:1px solid var(--brd);border-radius:20px;padding:48px 40px;width:100%;max-width:400px;text-align:center}
@@ -26,6 +27,7 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--preto);color:var(--
 .btn-login{width:100%;background:var(--rosa);color:white;border:none;border-radius:100px;padding:14px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;transition:all 0.2s;margin-top:4px}
 .btn-login:hover{background:var(--rosa-d)}
 .login-erro{font-size:13px;color:#ff6b6b;margin-top:12px;display:none}
+
 
 /* APP */
 #app{display:none}
@@ -40,6 +42,7 @@ nav{flex:1;padding:16px 12px;display:flex;flex-direction:column;gap:4px}
 .aside-footer{padding:16px 24px;border-top:1px solid var(--brd)}
 .btn-sair{font-size:12px;color:var(--dim);background:none;border:none;cursor:pointer;font-family:inherit;transition:color 0.2s}
 .btn-sair:hover{color:var(--branco)}
+
 
 main{padding:40px 48px;overflow-y:auto}
 .page-title{font-size:26px;font-weight:700;letter-spacing:-0.02em;margin-bottom:6px}
@@ -71,6 +74,7 @@ main{padding:40px 48px;overflow-y:auto}
 .empty-state .icon{font-size:40px;margin-bottom:12px}
 .empty-state p{font-size:14px}
 
+
 /* VIDEO LIST */
 .video-item{background:var(--cinza2);border:1px solid var(--brd);border-radius:12px;padding:16px 20px;display:grid;grid-template-columns:auto 1fr auto auto;gap:16px;align-items:center;margin-bottom:8px}
 .video-thumb{width:80px;height:80px;border-radius:8px;object-fit:cover;object-position:center;background:var(--cinza3);flex-shrink:0}
@@ -87,10 +91,12 @@ main{padding:40px 48px;overflow-y:auto}
 .form-add.aberto{display:block}
 .thumb-prev{width:120px;height:90px;object-fit:contain;background:var(--cinza3);border-radius:8px;border:1px solid var(--brd);margin-top:8px}
 
+
 @media(max-width:900px){.layout{grid-template-columns:1fr}aside{display:none}main{padding:24px 20px}.field-row,.field-row-3{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
+
 
 <div id="login-screen">
   <div class="login-box">
@@ -101,6 +107,7 @@ main{padding:40px 48px;overflow-y:auto}
     <p class="login-erro" id="login-erro">Senha incorreta.</p>
   </div>
 </div>
+
 
 <div id="app">
   <div class="layout">
@@ -118,7 +125,9 @@ main{padding:40px 48px;overflow-y:auto}
       <div class="aside-footer"><button class="btn-sair" onclick="sair()">← Sair</button></div>
     </aside>
 
+
     <main>
+
 
       <!-- PORTFÓLIO -->
       <div class="pagina ativa" id="pag-videos">
@@ -127,6 +136,7 @@ main{padding:40px 48px;overflow-y:auto}
         <div class="card">
           <div class="card-title">🎬 Vídeos publicados</div>
           <div id="video-lista"></div>
+
 
           <!-- Form adicionar -->
           <div class="form-add" id="form-add">
@@ -148,6 +158,9 @@ main{padding:40px 48px;overflow-y:auto}
               <div class="field"><label>Cargo</label><input type="text" id="add-cargo" placeholder="Ex: Vereador"></div>
             </div>
             <div class="field" style="margin-bottom:14px">
+              <label>Descrição</label><textarea id="add-desc" rows="3" placeholder="Breve descrição do trabalho realizado (aparece no modal ao clicar no vídeo)"></textarea>
+            </div>
+            <div class="field" style="margin-bottom:14px">
               <label>Thumbnail</label>
               <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px">
                 <input type="text" id="add-thumb-url" placeholder="URL da imagem (opcional)" style="flex:1;min-width:160px">
@@ -161,9 +174,11 @@ main{padding:40px 48px;overflow-y:auto}
             </div>
           </div>
 
+
           <button class="btn-add-video" id="btn-add" onclick="abrirAdd()">+ Adicionar vídeo</button>
         </div>
       </div>
+
 
       <!-- HERO -->
       <div class="pagina" id="pag-hero">
@@ -177,6 +192,7 @@ main{padding:40px 48px;overflow-y:auto}
           <div class="actions"><button class="btn-salvar" onclick="salvar('hero')">Salvar Hero</button></div>
         </div>
       </div>
+
 
       <!-- SOBRE -->
       <div class="pagina" id="pag-sobre">
@@ -205,6 +221,7 @@ main{padding:40px 48px;overflow-y:auto}
         </div>
       </div>
 
+
       <!-- SERVIÇOS -->
       <div class="pagina" id="pag-servicos">
         <h1 class="page-title">Serviços</h1>
@@ -212,6 +229,7 @@ main{padding:40px 48px;overflow-y:auto}
         <div id="srv-lista"></div>
         <div class="actions"><button class="btn-salvar" onclick="salvar('servicos')">Salvar Serviços</button></div>
       </div>
+
 
       <!-- INSTAGRAM -->
       <div class="pagina" id="pag-instagram">
@@ -225,6 +243,7 @@ main{padding:40px 48px;overflow-y:auto}
           <div class="actions"><button class="btn-salvar" onclick="salvar('instagram')">Salvar Instagram</button></div>
         </div>
       </div>
+
 
       <!-- CONTATO -->
       <div class="pagina" id="pag-contato">
@@ -248,6 +267,7 @@ main{padding:40px 48px;overflow-y:auto}
         </div>
       </div>
 
+
       <!-- CONFIG -->
       <div class="pagina" id="pag-config">
         <h1 class="page-title">Configurações</h1>
@@ -269,17 +289,21 @@ main{padding:40px 48px;overflow-y:auto}
         </div>
       </div>
 
+
     </main>
   </div>
 </div>
 
+
 <div class="toast" id="toast"></div>
+
 
 <script>
 var SENHA = 'ninalab2025';
 var SB_URL = 'https://nyvrwgyijzfgcwmudmui.supabase.co';
 var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55dnJ3Z3lpanpmZ2N3bXVkbXVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4MTc5OTksImV4cCI6MjA5MzM5Mzk5OX0.1Qf1NhTcU9Th16uWYCRcHDRIDrXrQqkPdqW-h6YZbpw';
 try { SB_URL = localStorage.getItem('sb_url') || SB_URL; SB_KEY = localStorage.getItem('sb_key') || SB_KEY; } catch(e) {}
+
 
 var DP = {
   hero: {linha2:'seu mandato',linha3:'em modo',btn:'Solicite uma proposta'},
@@ -289,8 +313,10 @@ var DP = {
   contato:{titulo:'Traga mais estratégia para o seu mandato.',tel:'(48) 99640-7748',email:'mv@ninalab.online',insta:'https://www.instagram.com/ninalab.on/',form_titulo:'Fale com nossos especialistas',form_sub:'Conte-nos sobre você e sua candidatura:',form_id:'xwvawnen'}
 };
 
+
 function ls(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
 function lss(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+
 
 var dados = {
   videos:    ls('nl_videos',[]),
@@ -300,6 +326,7 @@ var dados = {
   instagram: ls('nl_instagram', DP.instagram),
   contato:   ls('nl_contato', DP.contato)
 };
+
 
 // ── LOGIN ──
 function fazerLogin(){
@@ -318,6 +345,7 @@ function fazerLogin(){
 document.getElementById('senha-input').addEventListener('keydown',function(e){if(e.key==='Enter')fazerLogin();});
 function sair(){document.getElementById('app').style.display='none';document.getElementById('login-screen').style.display='flex';document.getElementById('senha-input').value='';}
 
+
 // ── NAV ──
 function irPara(pag,btn){
   document.querySelectorAll('.pagina').forEach(function(p){p.classList.remove('ativa');});
@@ -326,14 +354,17 @@ function irPara(pag,btn){
   btn.classList.add('active');
 }
 
+
 // ── PREENCHER CAMPOS ──
 function carregarTudo(){
   carregarDoSupabase().then(preencher).catch(preencher);
 }
 
+
 function preencher(){
   var h=dados.hero;
   set('hero-l1',h.linha2||''); set('hero-l2',h.linha3||''); set('hero-btn',h.btn||'');
+
 
   var s=dados.sobre;
   set('s1n',s.stat1_num); set('s1d',s.stat1_desc);
@@ -341,18 +372,23 @@ function preencher(){
   set('s3n',s.stat3_num); set('s3d',s.stat3_desc);
   set('s-titulo',s.titulo); set('s-p1',s.p1); set('s-p2',s.p2); set('s-btn',s.btn);
 
+
   var ig=dados.instagram;
   set('ig-titulo',ig.titulo); set('ig-btn',ig.btn); set('ig-link',ig.link);
+
 
   var c=dados.contato;
   set('ct-titulo',c.titulo); set('ct-tel',c.tel); set('ct-email',c.email); set('ct-insta',c.insta);
   set('ct-ftitulo',c.form_titulo); set('ct-fsub',c.form_sub); set('ct-fid',c.form_id);
 
+
   set('sb-url',SB_URL); set('sb-key',SB_KEY);
+
 
   renderServicos();
   renderVideos();
 }
+
 
 function set(id,val){
   var el=document.getElementById(id);
@@ -360,6 +396,7 @@ function set(id,val){
   if(el.tagName==='TEXTAREA')el.value=val;
   else el.value=val;
 }
+
 
 // ── VÍDEOS ──
 function renderVideos(){
@@ -392,6 +429,9 @@ function renderVideos(){
           +'</select></div>'
           +'<div class="field"><label>ID do vídeo</label><input type="text" id="ei-'+i+'" value="'+(v.id||'')+'"></div>'
         +'</div>'
+        +'<div class="field" style="margin-bottom:14px"><label>Descrição</label>'
+          +'<textarea id="ed-'+i+'" rows="3" style="width:100%;background:var(--cinza2);border:1.5px solid var(--brd);border-radius:10px;padding:12px 16px;font-size:14px;font-family:inherit;color:var(--branco);outline:none;resize:vertical">'+(v.descricao||'')+'</textarea>'
+        +'</div>'
         +'<div class="field" style="margin-bottom:14px"><label>Thumbnail</label>'
           +'<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px">'
             +'<input type="text" id="et-'+i+'" value="'+tval+'" placeholder="URL da imagem" style="flex:1;min-width:160px">'
@@ -408,11 +448,13 @@ function renderVideos(){
   lista.innerHTML=html;
 }
 
+
 function abrirEd(i){
   document.querySelectorAll('.form-edicao').forEach(function(el){el.classList.remove('aberto');});
   document.getElementById('fed-'+i).classList.add('aberto');
 }
 function fecharEd(i){document.getElementById('fed-'+i).classList.remove('aberto');}
+
 
 function prevThumb(i){
   var f=document.getElementById('ef-'+i).files[0];
@@ -426,20 +468,23 @@ function prevThumb(i){
   r.readAsDataURL(f);
 }
 
+
 function saveEd(i){
   var id=document.getElementById('ei-'+i).value.trim();
   var nome=document.getElementById('en-'+i).value.trim();
   var cargo=document.getElementById('ec-'+i).value.trim();
   var plat=document.getElementById('ep-'+i).value;
+  var desc=document.getElementById('ed-'+i).value.trim();
   var turl=document.getElementById('et-'+i).value.trim();
   var b64=dados.videos[i]._b64||'';
   if(!id){toast('Informe o ID',true);return;}
-  dados.videos[i]={id:id,nome:nome,cargo:cargo,plataforma:plat,thumb:b64||turl||dados.videos[i].thumb||''};
+  dados.videos[i]={id:id,nome:nome,cargo:cargo,descricao:desc,plataforma:plat,thumb:b64||turl||dados.videos[i].thumb||''};
   lss('nl_videos',dados.videos);
   syncVideos();
   renderVideos();
   toast('Vídeo atualizado ✓');
 }
+
 
 function delVideo(i){
   if(!confirm('Remover este vídeo?'))return;
@@ -450,13 +495,14 @@ function delVideo(i){
   toast('Vídeo removido.');
 }
 
+
 // Add video
 var _addB64='';
 function abrirAdd(){document.getElementById('form-add').classList.add('aberto');document.getElementById('btn-add').style.display='none';}
 function fecharAdd(){
   document.getElementById('form-add').classList.remove('aberto');
   document.getElementById('btn-add').style.display='flex';
-  ['add-id','add-nome','add-cargo','add-thumb-url'].forEach(function(id){document.getElementById(id).value='';});
+  ['add-id','add-nome','add-cargo','add-desc','add-thumb-url'].forEach(function(id){document.getElementById(id).value='';});
   document.getElementById('add-thumb-prev').style.display='none';
   document.getElementById('add-thumb-file').value='';
   _addB64='';
@@ -482,16 +528,18 @@ function addVideo(){
   var id=document.getElementById('add-id').value.trim();
   var nome=document.getElementById('add-nome').value.trim();
   var cargo=document.getElementById('add-cargo').value.trim();
+  var desc=document.getElementById('add-desc').value.trim();
   var turl=document.getElementById('add-thumb-url').value.trim();
   var plat=document.getElementById('add-plat').value;
   if(!id){toast('Informe o ID do vídeo',true);return;}
-  dados.videos.push({id:id,nome:nome,cargo:cargo,thumb:_addB64||turl,plataforma:plat});
+  dados.videos.push({id:id,nome:nome,cargo:cargo,descricao:desc,thumb:_addB64||turl,plataforma:plat});
   lss('nl_videos',dados.videos);
   syncVideos();
   renderVideos();
   fecharAdd();
   toast('Vídeo adicionado ✓');
 }
+
 
 // ── SERVIÇOS ──
 function renderServicos(){
@@ -502,6 +550,7 @@ function renderServicos(){
       +'<div class="field"><label>Descrição</label><textarea id="sd-'+i+'" rows="3">'+(s.desc||'')+'</textarea></div></div>';
   }).join('');
 }
+
 
 // ── SALVAR SEÇÕES ──
 function salvar(sec){
@@ -521,6 +570,7 @@ function salvar(sec){
   toast('Salvo ✓');
 }
 
+
 function salvarConfig(){
   SB_URL=document.getElementById('sb-url').value.trim();
   SB_KEY=document.getElementById('sb-key').value.trim();
@@ -528,12 +578,14 @@ function salvarConfig(){
   toast('Config salva ✓');
 }
 
+
 async function testarConexao(){
   try{
     var r=await fetch(SB_URL+'/rest/v1/conteudo?select=secao&limit=1',{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}});
     toast(r.ok?'Conexão OK ✓':'Erro: '+r.status,!r.ok);
   }catch(e){toast('Sem conexão',true);}
 }
+
 
 function trocarSenha(){
   var n=document.getElementById('nova-senha').value;
@@ -546,9 +598,11 @@ function trocarSenha(){
   toast('Senha alterada ✓');
 }
 
+
 // ── SUPABASE ──
 async function carregarDoSupabase(){
   var h={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};
+
 
   // Conteúdo
   var r=await fetch(SB_URL+'/rest/v1/conteudo?select=secao,dados',{headers:h});
@@ -562,6 +616,7 @@ async function carregarDoSupabase(){
     });
   }
 
+
   // Vídeos — sempre sobrescreve o local com o do Supabase
   var rv=await fetch(SB_URL+'/rest/v1/videos?select=*&order=ordem.asc',{headers:h});
   if(rv.ok){
@@ -573,12 +628,14 @@ async function carregarDoSupabase(){
         plataforma:v.plataforma,
         nome:v.nome,
         cargo:v.cargo,
+        descricao:v.descricao||'',
         thumb:v.thumb||''
       };
     });
     lss('nl_videos',dados.videos);
   }
 }
+
 
 async function syncVideos(){
   if(!SB_URL||!SB_KEY){toast('Sem conexão Supabase',true);return;}
@@ -589,16 +646,18 @@ async function syncVideos(){
     if(!rGet.ok) throw new Error('Erro ao buscar vídeos: '+rGet.status);
     var existentes=await rGet.json();
 
+
     // 2. Deleta cada um individualmente
     for(var i=0;i<existentes.length;i++){
       await fetch(SB_URL+'/rest/v1/videos?id=eq.'+existentes[i].id,{method:'DELETE',headers:h});
     }
 
+
     // 3. Insere os vídeos atuais
     if(dados.videos.length){
       var rows=dados.videos.map(function(v,i){
         var th=v.thumb&&!v.thumb.startsWith('data:')?v.thumb:'';
-        return{plataforma:v.plataforma||'vimeo',vimeo_id:v.plataforma==='vimeo'?v.id:null,youtube_id:v.plataforma==='youtube'?v.id:null,nome:v.nome||'',cargo:v.cargo||'',thumb:th,ordem:i,ativo:true};
+        return{plataforma:v.plataforma||'vimeo',vimeo_id:v.plataforma==='vimeo'?v.id:null,youtube_id:v.plataforma==='youtube'?v.id:null,nome:v.nome||'',cargo:v.cargo||'',descricao:v.descricao||'',thumb:th,ordem:i,ativo:true};
       });
       var rIns=await fetch(SB_URL+'/rest/v1/videos',{
         method:'POST',
@@ -608,12 +667,14 @@ async function syncVideos(){
       if(!rIns.ok) throw new Error('Erro ao inserir: '+rIns.status);
     }
 
+
     toast('Sincronizado ✓');
   }catch(e){
     console.warn('Sync erro:',e);
     toast('Erro ao sincronizar: '+e.message,true);
   }
 }
+
 
 async function syncConteudo(sec){
   if(!SB_URL||!SB_KEY)return;
@@ -625,6 +686,7 @@ async function syncConteudo(sec){
     });
   }catch(e){console.warn('Supabase offline.');}
 }
+
 
 // ── TOAST ──
 var _tt;
