@@ -287,6 +287,13 @@ main{padding:40px 48px;overflow-y:auto}
           </div>
         </div>
         <div class="card">
+          <div class="card-title">🧹 Manutenção</div>
+          <p style="font-size:13px;color:var(--dim);margin-bottom:16px">Se os vídeos do portfólio estiverem duplicados, use o botão abaixo para remover as repetições e re-sincronizar com o Supabase. Certifique-se de que a policy de DELETE está habilitada na tabela "videos" antes de usar.</p>
+          <div class="actions" style="border-top:none;padding-top:0;margin-top:0">
+            <button class="btn-sec" onclick="removerDuplicados()">Remover vídeos duplicados</button>
+          </div>
+        </div>
+        <div class="card">
           <div class="card-title">🔐 Senha</div>
           <div class="field"><label>Nova senha</label><input type="password" id="nova-senha"></div>
           <div class="field"><label>Confirmar</label><input type="password" id="conf-senha"></div>
@@ -685,6 +692,29 @@ async function carregarDoSupabase(){
     });
     lss('nl_videos',dados.videos);
   }
+}
+
+
+function removerDuplicados(){
+  var vistos={};
+  var unicos=[];
+  dados.videos.forEach(function(v){
+    var chave=(v.plataforma||'vimeo')+'|'+(v.id||'')+'|'+(v.nome||'')+'|'+(v.cargo||'')+'|'+(v.descricao||'')+'|'+(v.thumb||'');
+    if(!vistos[chave]){
+      vistos[chave]=true;
+      unicos.push(v);
+    }
+  });
+  var removidos=dados.videos.length-unicos.length;
+  dados.videos=unicos;
+  lss('nl_videos',dados.videos);
+  renderVideos();
+  if(removidos===0){
+    toast('Nenhum duplicado encontrado.');
+    return;
+  }
+  syncVideos();
+  toast(removidos+' duplicado(s) removido(s) ✓');
 }
 
 
