@@ -290,6 +290,7 @@ main{padding:40px 48px;overflow-y:auto}
           <div class="card-title">🧹 Manutenção</div>
           <p style="font-size:13px;color:var(--dim);margin-bottom:16px">Se os vídeos do portfólio estiverem duplicados, use o botão abaixo para remover as repetições e re-sincronizar com o Supabase. Certifique-se de que a policy de DELETE está habilitada na tabela "videos" antes de usar.</p>
           <div class="actions" style="border-top:none;padding-top:0;margin-top:0">
+            <button class="btn-sec" onclick="reenviarLocal()">Reenviar lista local para o Supabase</button>
             <button class="btn-sec" onclick="removerDuplicados()">Remover vídeos duplicados</button>
           </div>
         </div>
@@ -718,6 +719,19 @@ function removerDuplicados(){
 }
 
 
+function reenviarLocal(){
+  var local=ls('nl_videos',null);
+  if(!local||!local.length){
+    toast('Nenhum vídeo encontrado no armazenamento local.',true);
+    return;
+  }
+  dados.videos=local;
+  renderVideos();
+  syncVideos();
+  toast(local.length+' vídeo(s) reenviados para o Supabase ✓');
+}
+
+
 async function syncVideos(){
   if(!SB_URL||!SB_KEY){toast('Sem conexão Supabase',true);return;}
   var h={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'};
@@ -745,7 +759,11 @@ async function syncVideos(){
         headers:Object.assign({},h,{'Prefer':'return=minimal'}),
         body:JSON.stringify(rows)
       });
-      if(!rIns.ok) throw new Error('Erro ao inserir: '+rIns.status);
+      if(!rIns.ok){
+        var errBody='';
+        try{errBody=await rIns.text();}catch(e2){}
+        throw new Error('Erro ao inserir: '+rIns.status+(errBody?' — '+errBody.slice(0,200):''));
+      }
     }
 
 
