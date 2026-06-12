@@ -76,12 +76,7 @@ main{padding:40px 48px;overflow-y:auto}
 
 
 /* VIDEO LIST */
-.video-item{background:var(--cinza2);border:1px solid var(--brd);border-radius:12px;padding:16px 20px;display:grid;grid-template-columns:auto auto 1fr auto auto;gap:16px;align-items:center;margin-bottom:8px}
-.video-ordem{display:flex;flex-direction:column;gap:4px}
-.btn-ordem{background:var(--cinza3);border:1px solid var(--brd);border-radius:6px;width:28px;height:24px;color:var(--branco);cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;transition:all 0.15s}
-.btn-ordem:hover{border-color:var(--rosa);color:var(--rosa)}
-.btn-ordem:disabled{opacity:0.25;cursor:not-allowed}
-.btn-ordem:disabled:hover{border-color:var(--brd);color:var(--branco)}
+.video-item{background:var(--cinza2);border:1px solid var(--brd);border-radius:12px;padding:16px 20px;display:grid;grid-template-columns:auto 1fr auto auto;gap:16px;align-items:center;margin-bottom:8px}
 .video-thumb{width:80px;height:80px;border-radius:8px;object-fit:cover;object-position:center;background:var(--cinza3);flex-shrink:0}
 .video-info h4{font-size:14px;font-weight:600;margin-bottom:3px}
 .video-info p{font-size:12px;color:var(--dim)}
@@ -423,10 +418,6 @@ function renderVideos(){
     var th=(v.thumb&&v.thumb.length>10)?v.thumb:(v.plataforma==='vimeo'?'https://vumbnail.com/'+v.id+'.jpg':'https://img.youtube.com/vi/'+v.id+'/hqdefault.jpg');
     var tval=v.thumb||'';
     html+='<div class="video-item" id="vi-'+i+'">'
-      +'<div class="video-ordem">'
-        +'<button class="btn-ordem" onclick="moverVideo('+i+',-1)"'+(i===0?' disabled':'')+' title="Mover para cima">▲</button>'
-        +'<button class="btn-ordem" onclick="moverVideo('+i+',1)"'+(i===dados.videos.length-1?' disabled':'')+' title="Mover para baixo">▼</button>'
-      +'</div>'
       +'<img class="video-thumb" src="'+th+'" onerror="this.style.opacity=0.2">'
       +'<div class="video-info"><h4>'+(v.nome||'Sem nome')+'</h4><p>'+(v.cargo||'')+' · '+(v.plataforma||'vimeo').toUpperCase()+' · '+v.id+'</p></div>'
       +'<span class="video-badge">'+(v.plataforma||'vimeo')+'</span>'
@@ -534,18 +525,6 @@ function delVideo(i){
   syncVideos();
   renderVideos();
   toast('Vídeo removido.');
-}
-
-
-function moverVideo(i,dir){
-  var j=i+dir;
-  if(j<0||j>=dados.videos.length)return;
-  var tmp=dados.videos[i];
-  dados.videos[i]=dados.videos[j];
-  dados.videos[j]=tmp;
-  lss('nl_videos',dados.videos);
-  syncVideos();
-  renderVideos();
 }
 
 
