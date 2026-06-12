@@ -408,7 +408,7 @@ function renderVideos(){
   var html='';
   dados.videos.forEach(function(v,i){
     var th=(v.thumb&&v.thumb.length>10)?v.thumb:(v.plataforma==='vimeo'?'https://vumbnail.com/'+v.id+'.jpg':'https://img.youtube.com/vi/'+v.id+'/hqdefault.jpg');
-    var tval=v.thumb&&!v.thumb.startsWith('data:')?v.thumb:'';
+    var tval=v.thumb||'';
     html+='<div class="video-item" id="vi-'+i+'">'
       +'<img class="video-thumb" src="'+th+'" onerror="this.style.opacity=0.2">'
       +'<div class="video-info"><h4>'+(v.nome||'Sem nome')+'</h4><p>'+(v.cargo||'')+' · '+(v.plataforma||'vimeo').toUpperCase()+' · '+v.id+'</p></div>'
@@ -456,16 +456,41 @@ function abrirEd(i){
 function fecharEd(i){document.getElementById('fed-'+i).classList.remove('aberto');}
 
 
-function prevThumb(i){
+// ── UPLOAD DE THUMBNAIL (Supabase Storage) ──
+async function uploadThumb(file, slot){
+  if(!SB_URL||!SB_KEY){toast('Configure o Supabase antes de subir imagens',true);return null;}
+  var ext=(file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';
+  var path='thumb_'+Date.now()+'_'+Math.random().toString(36).slice(2,8)+'.'+ext;
+  var url=SB_URL+'/storage/v1/object/thumbnails/'+path;
+  try{
+    var r=await fetch(url,{
+      method:'POST',
+      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':file.type||'image/jpeg'},
+      body:file
+    });
+    if(!r.ok) throw new Error('Erro no upload: '+r.status);
+    return SB_URL+'/storage/v1/object/public/thumbnails/'+path;
+  }catch(e){
+    toast('Erro ao subir imagem: '+e.message,true);
+    return null;
+  }
+}
+
+
+async function prevThumb(i){
   var f=document.getElementById('ef-'+i).files[0];
   if(!f)return;
-  var r=new FileReader();
-  r.onload=function(e){
-    document.getElementById('ep-img-'+i).src=e.target.result;
-    dados.videos[i]._b64=e.target.result;
-    document.getElementById('et-'+i).value='';
-  };
-  r.readAsDataURL(f);
+  var img=document.getElementById('ep-img-'+i);
+  var imgPrev=img.src;
+  img.style.opacity='0.4';
+  toast('Enviando imagem...');
+  var publicUrl=await uploadThumb(f,i);
+  img.style.opacity='1';
+  if(!publicUrl){ img.src=imgPrev; return; }
+  img.src=publicUrl;
+  document.getElementById('et-'+i).value=publicUrl;
+  dados.videos[i]._uploadedThumb=publicUrl;
+  toast('Imagem enviada ✓');
 }
 
 
@@ -476,9 +501,8 @@ function saveEd(i){
   var plat=document.getElementById('ep-'+i).value;
   var desc=document.getElementById('ed-'+i).value.trim();
   var turl=document.getElementById('et-'+i).value.trim();
-  var b64=dados.videos[i]._b64||'';
   if(!id){toast('Informe o ID',true);return;}
-  dados.videos[i]={id:id,nome:nome,cargo:cargo,descricao:desc,plataforma:plat,thumb:b64||turl||dados.videos[i].thumb||''};
+  dados.videos[i]={id:id,nome:nome,cargo:cargo,descricao:desc,plataforma:plat,thumb:turl||dados.videos[i].thumb||''};
   lss('nl_videos',dados.videos);
   syncVideos();
   renderVideos();
@@ -512,17 +536,23 @@ function updAddLabel(){
   document.getElementById('add-id-lbl').textContent=p==='vimeo'?'ID do Vimeo':'ID do YouTube';
   document.getElementById('add-id').placeholder=p==='vimeo'?'Ex: 1188104112':'Ex: dQw4w9WgXcQ';
 }
-function prevAddThumb(){
+async function prevAddThumb(){
   var f=document.getElementById('add-thumb-file').files[0];
   if(!f)return;
-  var r=new FileReader();
-  r.onload=function(e){
-    _addB64=e.target.result;
-    var img=document.getElementById('add-thumb-prev');
-    img.src=e.target.result; img.style.display='block';
-    document.getElementById('add-thumb-url').value='';
-  };
-  r.readAsDataURL(f);
+  var img=document.getElementById('add-thumb-prev');
+  img.style.display='block'; img.style.opacity='0.4';
+  // preview local imediato enquanto sobe
+  var localReader=new FileReader();
+  localReader.onload=function(e){ img.src=e.target.result; };
+  localReader.readAsDataURL(f);
+  toast('Enviando imagem...');
+  var publicUrl=await uploadThumb(f);
+  img.style.opacity='1';
+  if(!publicUrl){ return; }
+  img.src=publicUrl;
+  _addB64='';
+  document.getElementById('add-thumb-url').value=publicUrl;
+  toast('Imagem enviada ✓');
 }
 function addVideo(){
   var id=document.getElementById('add-id').value.trim();
@@ -532,7 +562,7 @@ function addVideo(){
   var turl=document.getElementById('add-thumb-url').value.trim();
   var plat=document.getElementById('add-plat').value;
   if(!id){toast('Informe o ID do vídeo',true);return;}
-  dados.videos.push({id:id,nome:nome,cargo:cargo,descricao:desc,thumb:_addB64||turl,plataforma:plat});
+  dados.videos.push({id:id,nome:nome,cargo:cargo,descricao:desc,thumb:turl,plataforma:plat});
   lss('nl_videos',dados.videos);
   syncVideos();
   renderVideos();
@@ -656,7 +686,7 @@ async function syncVideos(){
     // 3. Insere os vídeos atuais
     if(dados.videos.length){
       var rows=dados.videos.map(function(v,i){
-        var th=v.thumb&&!v.thumb.startsWith('data:')?v.thumb:'';
+        var th=v.thumb||'';
         return{plataforma:v.plataforma||'vimeo',vimeo_id:v.plataforma==='vimeo'?v.id:null,youtube_id:v.plataforma==='youtube'?v.id:null,nome:v.nome||'',cargo:v.cargo||'',descricao:v.descricao||'',thumb:th,ordem:i,ativo:true};
       });
       var rIns=await fetch(SB_URL+'/rest/v1/videos',{
